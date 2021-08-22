@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -54,5 +53,40 @@ public class BlogController {
         post.ifPresent(res::add);
         model.addAttribute("post", res);
         return "post-detail";
+    }
+
+
+
+    @GetMapping("/blog/{id}/edit")
+    public String editPost(@PathVariable(value = "id") long id, Model model) {
+        if(!postRepository.existsById(id)){
+            return "redirect:/blog";
+        }
+        Optional<BlogPost> post = postRepository.findById(id);
+        ArrayList<BlogPost> res = new ArrayList<>();
+        post.ifPresent(res::add);
+        model.addAttribute("post", res);
+        return "post-edit";
+    }
+
+    @PostMapping("/blog/{id}/edit")
+    public String blogPostUpdate(@PathVariable(value = "id") long id,
+                                 @RequestParam String title,
+                                 @RequestParam String anons,
+                                 @RequestParam String full_text,
+                                 Model model){
+        BlogPost post = postRepository.findById(id).orElseThrow();
+        post.setTitle(title);
+        post.setAnons(anons);
+        post.setText(full_text);
+        postRepository.save(post);
+        return "redirect:/blog";
+    }
+
+    @PostMapping("/blog/{id}/remove")
+    public String removePost(@PathVariable(value = "id") long id, Model model) {
+        BlogPost post = postRepository.findById(id).orElseThrow();
+        postRepository.delete(post);
+        return "redirect:/blog";
     }
 }
