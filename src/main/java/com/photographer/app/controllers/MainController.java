@@ -18,4 +18,10 @@ class MainController {
         return "about";
     }
 
+    @GetMapping("/linktree")
+    public String linktree(Model model) {
+        model.addAttribute("title", "Связь");
+        return "linktree";
+    }
+
 }
