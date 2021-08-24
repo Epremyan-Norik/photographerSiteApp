@@ -1,7 +1,7 @@
 package com.photographer.app.controllers;
 
 
-import com.photographer.app.models.BlogPost;
+import com.photographer.app.models.BlogPostOld;
 import com.photographer.app.repo.BlogPostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ public class BlogController {
     @GetMapping("/blog")
     public String blog(Model model) {
         //model.addAttribute("title", "Главная страница");
-        Iterable<BlogPost> posts = postRepository.findAll();
+        Iterable<BlogPostOld> posts = postRepository.findAll();
         model.addAttribute("posts", posts);
         return "blog";
     }
@@ -38,7 +38,7 @@ public class BlogController {
                           @RequestParam String anons,
                           @RequestParam String full_text,
                           Model model){
-        BlogPost post = new BlogPost(title, anons, full_text);
+        BlogPostOld post = new BlogPostOld(title, anons, full_text);
         postRepository.save(post);
         return "redirect:/blog";
     }
@@ -48,8 +48,8 @@ public class BlogController {
         if(!postRepository.existsById(id)){
             return "redirect:/blog";
         }
-        Optional<BlogPost> post = postRepository.findById(id);
-        ArrayList<BlogPost> res = new ArrayList<>();
+        Optional<BlogPostOld> post = postRepository.findById(id);
+        ArrayList<BlogPostOld> res = new ArrayList<>();
         post.ifPresent(res::add);
         model.addAttribute("post", res);
         return "post-detail";
@@ -62,8 +62,8 @@ public class BlogController {
         if(!postRepository.existsById(id)){
             return "redirect:/blog";
         }
-        Optional<BlogPost> post = postRepository.findById(id);
-        ArrayList<BlogPost> res = new ArrayList<>();
+        Optional<BlogPostOld> post = postRepository.findById(id);
+        ArrayList<BlogPostOld> res = new ArrayList<>();
         post.ifPresent(res::add);
         model.addAttribute("post", res);
         return "post-edit";
@@ -75,7 +75,7 @@ public class BlogController {
                                  @RequestParam String anons,
                                  @RequestParam String full_text,
                                  Model model){
-        BlogPost post = postRepository.findById(id).orElseThrow();
+        BlogPostOld post = postRepository.findById(id).orElseThrow();
         post.setTitle(title);
         post.setAnons(anons);
         post.setText(full_text);
@@ -85,7 +85,7 @@ public class BlogController {
 
     @PostMapping("/blog/{id}/remove")
     public String removePost(@PathVariable(value = "id") long id, Model model) {
-        BlogPost post = postRepository.findById(id).orElseThrow();
+        BlogPostOld post = postRepository.findById(id).orElseThrow();
         postRepository.delete(post);
         return "redirect:/blog";
     }

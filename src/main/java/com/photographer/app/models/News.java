@@ -1,18 +1,18 @@
 package com.photographer.app.models;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
-@Table(name = "blog_post", schema = "public", catalog = "site_test")
-public class BlogPost {
+public class News {
     private int id;
     private String title;
     private String anons;
     private String fullText;
     private int authorId;
-    private Timestamp dtPost;
-    private int viewsCounter;
+    private int views;
 
     @Id
     @Column(name = "id")
@@ -65,23 +65,13 @@ public class BlogPost {
     }
 
     @Basic
-    @Column(name = "dt_post")
-    public Timestamp getDtPost() {
-        return dtPost;
+    @Column(name = "views")
+    public int getViews() {
+        return views;
     }
 
-    public void setDtPost(Timestamp dtPost) {
-        this.dtPost = dtPost;
-    }
-
-    @Basic
-    @Column(name = "views_counter")
-    public int getViewsCounter() {
-        return viewsCounter;
-    }
-
-    public void setViewsCounter(int viewsCounter) {
-        this.viewsCounter = viewsCounter;
+    public void setViews(int views) {
+        this.views = views;
     }
 
     @Override
@@ -89,15 +79,14 @@ public class BlogPost {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BlogPost blogPost = (BlogPost) o;
+        News news = (News) o;
 
-        if (id != blogPost.id) return false;
-        if (authorId != blogPost.authorId) return false;
-        if (viewsCounter != blogPost.viewsCounter) return false;
-        if (title != null ? !title.equals(blogPost.title) : blogPost.title != null) return false;
-        if (anons != null ? !anons.equals(blogPost.anons) : blogPost.anons != null) return false;
-        if (fullText != null ? !fullText.equals(blogPost.fullText) : blogPost.fullText != null) return false;
-        if (dtPost != null ? !dtPost.equals(blogPost.dtPost) : blogPost.dtPost != null) return false;
+        if (id != news.id) return false;
+        if (authorId != news.authorId) return false;
+        if (views != news.views) return false;
+        if (title != null ? !title.equals(news.title) : news.title != null) return false;
+        if (anons != null ? !anons.equals(news.anons) : news.anons != null) return false;
+        if (fullText != null ? !fullText.equals(news.fullText) : news.fullText != null) return false;
 
         return true;
     }
@@ -109,8 +98,7 @@ public class BlogPost {
         result = 31 * result + (anons != null ? anons.hashCode() : 0);
         result = 31 * result + (fullText != null ? fullText.hashCode() : 0);
         result = 31 * result + authorId;
-        result = 31 * result + (dtPost != null ? dtPost.hashCode() : 0);
-        result = 31 * result + viewsCounter;
+        result = 31 * result + views;
         return result;
     }
 }
