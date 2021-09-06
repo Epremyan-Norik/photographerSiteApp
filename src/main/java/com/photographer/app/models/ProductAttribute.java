@@ -5,12 +5,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-public class OrderStatus implements Serializable {
-
+public class ProductAttribute {
     @Id
     private Long id;
 
@@ -20,20 +18,17 @@ public class OrderStatus implements Serializable {
     @NotNull
     private String description;
 
-    public OrderStatus() {
-    }
-
     @Transient
-    @OneToMany(mappedBy = "status")
-    private Set<Orders> ordersWithStatus;
+    @OneToMany(mappedBy = "attribute")
+    private Set<ProductAttValue> allProductWithAtt;
 
     @Override
     public String toString() {
-        return "\nOrderStatus{" +
+        return "\nProductAttribute{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", ordersWithStatus=" + ordersWithStatus +
+                ", allProductWithAtt=" + allProductWithAtt +
                 '}';
     }
 
@@ -61,11 +56,14 @@ public class OrderStatus implements Serializable {
         this.description = description;
     }
 
-    public Set<Orders> getOrdersWithStatus() {
-        return ordersWithStatus;
+    public Set<ProductAttValue> getAllProductWithAtt() {
+        return allProductWithAtt;
     }
 
-    public void setOrdersWithStatus(Set<Orders> ordersWithStatus) {
-        this.ordersWithStatus = ordersWithStatus;
+    public void setAllProductWithAtt(Set<ProductAttValue> allProductWithAtt) {
+        this.allProductWithAtt = allProductWithAtt;
+    }
+
+    public ProductAttribute() {
     }
 }

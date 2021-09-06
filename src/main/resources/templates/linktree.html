@@ -1,21 +1,39 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${title}" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+    <title th:text="${title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"> -->
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
+    <link href="../static/css/main.css" th:href="@{/css/no-fixedNav.css}" rel="stylesheet"/>
 </head>
 <body>
-<header th:insert="blocks/header :: header">
-</header>
+<div class="container1">
+    <header th:insert="blocks/header :: header">
+    </header>
+    <div id="social" class="container">
 
-<div class="container mt-5">
-    <h1>Link Tree</h1>
+        <h2>Связаться со мной</h2>
+
+        <div class="links">
+            <p class="social-link">
+                <a id="inst-link" href="http://instagram.com/_u/{USERNAME}/">Мой Instagram</a>
+            </p>
+            <p  class="social-link">
+                <a id="whatsapp-link" title="WhatsApp" href="whatsapp://send?phone=+120345678910">Написать в WhatsApp</a>
+            </p>
+            <p  class="social-link">
+                <a id="telegram-link" title="Telegram" href="tg://resolve?domain=nikname">Написать в Telegram</a>
+            </p>
+            <p  class="social-link">
+                <a id="vk-link" title="VK.com" href="https://vk.com">Моя страница Вконтакте</a>
+            </p>
+        </div>
+
+
+
+    </div>
+
 </div>
-
-
-<footer th:insert="blocks/footer :: footer">
-</footer>
-
 </body>
 </html>

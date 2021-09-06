@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.photographer.app.mapper.EntityMapper">
+
+    <!--название метода-->
+    <select
+            id="getEntityById"
+            parameterType="java.lang.Long"
+            resultType="com.photographer.app.mapper.Entity"> <!--тип входящих параметров, может быть поистине разнообразным, начиная от Map и заканчивая EntityBean.-->
+        select * from entity where id =
+        #{id}  <!-- поле в фигурных скобках это параметр, который прилетел в метод. Если это Map — то {имя} это ключ к переменной. Если в метод передаем EntityBean то {имя} — это название переменной данного bean.-->
+    </select>
+
+    <select id="getAllEntities" resultType="com.photographer.app.mapper.Entity">
+        select *
+        from entity
+    </select>
+
+    <select
+            id="getAllEntitiesByType"
+            parameterType="java.lang.Long"
+            resultType="com.photographer.app.mapper.Entity"> <!--тип входящих параметров, может быть поистине разнообразным, начиная от Map и заканчивая EntityBean.-->
+        select * from entity where id_type =
+        #{type}  <!-- поле в фигурных скобках это параметр, который прилетел в метод. Если это Map — то {имя} это ключ к переменной. Если в метод передаем EntityBean то {имя} — это название переменной данного bean.-->
+    </select>
+
+    <delete id="deleteEntityById" parameterType="com.photographer.app.mapper.Entity">
+        delete from entity where id = #{id}
+    </delete>
+
+    <select id="insertEntity" parameterType="com.photographer.app.mapper.Entity" resultType = "int">
+        INSERT INTO entity(id_type)
+        VALUES (#{id_type})
+        RETURNING id
+    </select>
+
+</mapper>

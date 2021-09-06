@@ -1,76 +1,70 @@
 package com.photographer.app.models;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "order_items", schema = "public", catalog = "site_test")
-public class OrderItems {
-    private int id;
-    private int productId;
-    private int orderId;
-    private int prCount;
-
+public class OrderItems implements Serializable {
     @Id
-    @Column(name = "id")
-    public int getId() {
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Orders order;
+
+    @NotNull
+    private int pr_count;
+
+    @Override
+    public String toString() {
+        return "\nOrderItems{" +
+                "id=" + id +
+                ", product=" + product +
+                ", order=" + order +
+                ", pr_count=" + pr_count +
+                '}';
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "product_id")
-    public int getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    @Basic
-    @Column(name = "order_id")
-    public int getOrderId() {
-        return orderId;
+    public Orders getOrder() {
+        return order;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public void setOrder(Orders order) {
+        this.order = order;
     }
 
-    @Basic
-    @Column(name = "pr_count")
-    public int getPrCount() {
-        return prCount;
+    public int getPr_count() {
+        return pr_count;
     }
 
-    public void setPrCount(int prCount) {
-        this.prCount = prCount;
+    public void setPr_count(int pr_count) {
+        this.pr_count = pr_count;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        OrderItems that = (OrderItems) o;
-
-        if (id != that.id) return false;
-        if (productId != that.productId) return false;
-        if (orderId != that.orderId) return false;
-        if (prCount != that.prCount) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + productId;
-        result = 31 * result + orderId;
-        result = 31 * result + prCount;
-        return result;
+    public OrderItems() {
     }
 }

@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-public class OrderStatus implements Serializable {
+public class OrderAttribute implements Serializable {
 
     @Id
     private Long id;
@@ -20,20 +20,21 @@ public class OrderStatus implements Serializable {
     @NotNull
     private String description;
 
-    public OrderStatus() {
-    }
-
     @Transient
-    @OneToMany(mappedBy = "status")
-    private Set<Orders> ordersWithStatus;
+    @OneToMany(mappedBy = "attribute")
+    private Set<OrderAttValue> ordersWithAtt;
+
+    public OrderAttribute() {
+
+    }
 
     @Override
     public String toString() {
-        return "\nOrderStatus{" +
+        return "\nOrderAttribute{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", ordersWithStatus=" + ordersWithStatus +
+                ", ordersWithAtt=" + ordersWithAtt +
                 '}';
     }
 
@@ -61,11 +62,11 @@ public class OrderStatus implements Serializable {
         this.description = description;
     }
 
-    public Set<Orders> getOrdersWithStatus() {
-        return ordersWithStatus;
+    public Set<OrderAttValue> getOrdersWithAtt() {
+        return ordersWithAtt;
     }
 
-    public void setOrdersWithStatus(Set<Orders> ordersWithStatus) {
-        this.ordersWithStatus = ordersWithStatus;
+    public void setOrdersWithAtt(Set<OrderAttValue> ordersWithAtt) {
+        this.ordersWithAtt = ordersWithAtt;
     }
 }

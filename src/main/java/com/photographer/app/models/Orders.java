@@ -1,42 +1,84 @@
 package com.photographer.app.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.math.BigInteger;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 public class Orders {
-    private int id;
-    private int uId;
-    private Timestamp datetime;
-    private int statusId;
-    private BigInteger amout;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    private Long id;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @NotNull
+    private Timestamp datetime;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private  OrderStatus status;
+
+    @NotNull
+    private double amount;
+
+    @Transient
+    @OneToMany(mappedBy = "order")
+    private Set<OrderAttValue> attributesOfOrder;
+
+    @Transient
+    @OneToMany(mappedBy = "order")
+    private Set<OrderItems> itemsOfOrder;
+
+    public Set<OrderItems> getItemsOfOrder() {
+        return itemsOfOrder;
+    }
+
+    public void setItemsOfOrder(Set<OrderItems> itemsOfOrder) {
+        this.itemsOfOrder = itemsOfOrder;
+    }
+
+    public Set<OrderAttValue> getAttributesOfOrder() {
+        return attributesOfOrder;
+    }
+
+    public void setAttributesOfOrder(Set<OrderAttValue> attributesOfOrder) {
+        this.attributesOfOrder = attributesOfOrder;
+    }
+
+    @Override
+    public String toString() {
+        return "\nOrders{" +
+                "id=" + id +
+                ", user=" + user +
+                ", datetime=" + datetime +
+                ", status=" + status +
+                ", amount=" + amount +
+                '}';
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "u_id")
-    public int getuId() {
-        return uId;
+    public User getUser() {
+        return user;
     }
 
-    public void setuId(int uId) {
-        this.uId = uId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    @Basic
-    @Column(name = "datetime")
     public Timestamp getDatetime() {
         return datetime;
     }
@@ -45,49 +87,22 @@ public class Orders {
         this.datetime = datetime;
     }
 
-    @Basic
-    @Column(name = "status_id")
-    public int getStatusId() {
-        return statusId;
+    public OrderStatus getStatus() {
+        return status;
     }
 
-    public void setStatusId(int statusId) {
-        this.statusId = statusId;
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
-    @Basic
-    @Column(name = "amout")
-    public BigInteger getAmout() {
-        return amout;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setAmout(BigInteger amout) {
-        this.amout = amout;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Orders orders = (Orders) o;
-
-        if (id != orders.id) return false;
-        if (uId != orders.uId) return false;
-        if (statusId != orders.statusId) return false;
-        if (datetime != null ? !datetime.equals(orders.datetime) : orders.datetime != null) return false;
-        if (amout != null ? !amout.equals(orders.amout) : orders.amout != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + uId;
-        result = 31 * result + (datetime != null ? datetime.hashCode() : 0);
-        result = 31 * result + statusId;
-        result = 31 * result + (amout != null ? amout.hashCode() : 0);
-        return result;
+    public Orders() {
     }
 }

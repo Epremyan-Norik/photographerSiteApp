@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.photographer.app.mapper.ValueMapper">
+
+    <!--название метода-->
+    <select
+            id="getValueByIds"
+            parameterType="map"
+            resultType="com.photographer.app.mapper.Value">
+        select * from att_value where en_id = #{en_id} AND att_id =
+        #{att_id}
+    </select>
+
+    <select id="getValues" resultType="com.photographer.app.mapper.Value">
+        select *
+        from att_value
+    </select>
+
+    <select
+            id="getUserIdByUsername"
+            parameterType="String"
+            resultType="com.photographer.app.mapper.Value">
+        select * from att_value where att_value = '${username}'
+        AND att_id = (select id from attribute where att_name = 'username')
+    </select>
+
+    <select
+            id="getValuesByAttId"
+            parameterType="java.lang.Long"
+            resultType="com.photographer.app.mapper.Value">
+        select * from att_value where att_id = #{att_id}
+
+    </select>
+
+    <update id="updateValue" parameterType="com.photographer.app.mapper.Value">
+        UPDATE att_value
+        SET att_value = #{att_value}
+        WHERE en_id = #{en_id}
+          AND att_id = #{att_id};
+    </update>
+
+
+    <insert id="insertValue" parameterType="com.photographer.app.mapper.Value">
+        INSERT INTO att_value(en_id, att_id, att_value)
+        VALUES (#{en_id}, #{att_id}, #{att_value})
+    </insert>
+
+
+</mapper>

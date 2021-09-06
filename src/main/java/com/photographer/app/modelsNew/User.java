@@ -1,40 +1,24 @@
-package com.photographer.app.models;
+package com.photographer.app.modelsNew;
 
+import  com.photographer.app.modelsNew.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Set;
 
-@Entity
-@Table(name = "t_user")
-public class User implements UserDetails{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+public class User implements UserDetails {
+
     private Long id;
-    @Size(min=2, message = "Не меньше 5 знаков")
+
     private String username;
-    @Size(min=2, message = "Не меньше 5 знаков")
+
     private String password;
-    @Transient
+
     private String passwordConfirm;
-    @ManyToMany(fetch = FetchType.EAGER)
+
     private Set<Role> roles;
-
-    @Transient
-    @OneToMany(mappedBy = "author")
-    public Set<BlogPost> getPostsFromBlog;
-
-    @Transient
-    @OneToMany(mappedBy = "author")
-    public Set<NewsPost> getPostsFromNews;
-
-    @Transient
-    @OneToMany(mappedBy = "user")
-    private Set<UserAttValue> allUserAtt;
-
 
     public User() {
     }
@@ -71,11 +55,11 @@ public class User implements UserDetails{
         return true;
     }
 
-
     public void setUsername(String username) {
         this.username = username;
     }
 
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
     }
@@ -102,5 +86,16 @@ public class User implements UserDetails{
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "\nUser{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", passwordConfirm='" + passwordConfirm + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

@@ -1,21 +1,61 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${title}" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+    <title th:text="${title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"> -->
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
+    <link href="../static/css/main.css" th:href="@{/css/no-fixedNav.css}" rel="stylesheet"/>
 </head>
 <body>
-
+<div class="container1">
     <header th:insert="blocks/header :: header">
     </header>
 
-    <div class="container mt-5">
-        <h1>Обо мне</h1>
+    <div id="about-block" class="container">
+
+        <h2>Обо мне</h2>
+
+        <p><img id="profile-img" th:src="@{/img/person.jpg}" alt="">
+            &nbsp&nbspLorem ipsum dolor sit amet, consectetur adipiscing elit. In sit amet vestibulum velit. Donec ipsum
+            arcu, aliquet a massa ut, venenatis elementum nibh. Ut venenatis vestibulum dictum. Etiam in tellus in
+            tortor rhoncus pellentesque. Aenean non mi lacinia, sollicitudin sem in, maximus libero. Aenean aliquam
+            placerat purus, nec pellentesque erat ultrices rhoncus. Pellentesque habitant morbi tristique senectus et
+            netus et malesuada fames ac turpis egestas. Donec in augue arcu. Donec in nunc finibus, placerat orci nec,
+            consequat velit. Donec iaculis neque urna, congue laoreet magna tristique eu. Nullam sit amet sollicitudin
+            mauris. Etiam egestas volutpat felis eget malesuada. Donec vel scelerisque ligula, ac consequat elit. Etiam
+            porttitor dolor velit, ac fringilla est mattis sed.
+
+            Donec porttitor, nibh sed finibus feugiat, lectus elit pretium risus, sit amet interdum metus diam et purus.
+            Quisque consectetur suscipit augue id viverra. Sed tempus arcu a libero vestibulum, non fermentum purus
+            vulputate. Donec quam magna, ornare vel nulla a, pretium vestibulum elit. Nam eu risus quis arcu sodales
+            volutpat. Sed ullamcorper sapien at velit fermentum, vel sagittis dolor malesuada. Aliquam lobortis orci
+            dui, sed aliquam mauris viverra et. Mauris feugiat lobortis tellus. Nullam ac nunc gravida, volutpat ipsum
+            id, auctor augue. Cras at mollis felis. Orci varius natoque penatibus et magnis dis parturient montes,
+            nascetur ridiculus mus. Sed id nunc viverra, iaculis nisl sit amet, fermentum sem. Morbi lobortis metus eget
+            hendrerit gravida. Sed a sem ultrices, blandit mauris aliquam, aliquet nisi. Aliquam dictum dictum nunc, nec
+            egestas nunc convallis in. Nam interdum nulla commodo tellus ornare, eget consectetur leo finibus.
+
+            Duis tincidunt rhoncus ipsum ut gravida. Sed accumsan justo nulla, ut volutpat lectus commodo sit amet. In
+            pellentesque gravida massa, eu ornare massa tristique sed. Phasellus a urna a quam dictum fermentum. Vivamus
+            at justo arcu. Nulla lacus enim, rutrum in ultrices eget, dignissim vitae arcu. Aenean posuere diam arcu, ut
+            varius nulla commodo eu. Nam id ultricies ante, non ullamcorper justo. Nulla hendrerit porta arcu quis
+            egestas. Quisque eu porttitor elit. Pellentesque habitant morbi tristique senectus et netus et malesuada
+            fames ac turpis egestas.
+
+            Cras a dui nisl. Sed gravida turpis id varius efficitur. Nulla ornare nisi in maximus ultrices. Etiam
+            ultricies, turpis non vestibulum interdum, sapien leo blandit enim, sed pellentesque lorem justo tristique
+            urna. Cras eget imperdiet nisl. Praesent ac magna ac libero varius luctus et ut urna. Etiam dignissim id
+            arcu nec luctus. Cras vel aliquam purus, a pellentesque justo. Sed tristique volutpat pellentesque.
+            Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nunc a ornare lorem.
+            Aliquam interdum purus vel auctor aliquam. Aliquam laoreet sapien quis facilisis pretium. Etiam eget nunc
+            aliquam, interdum quam eu, pretium mi. Sed tempor eros et elit semper, ut faucibus lacus maximus. Aliquam
+            posuere molestie mi, nec porttitor mi pharetra ac.
+        </p>
+
+
     </div>
 
-    <footer th:insert="blocks/footer :: footer">
-    </footer>
-
+</div>
 </body>
 </html>

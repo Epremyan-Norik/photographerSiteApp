@@ -1,64 +1,62 @@
 package com.photographer.app.models;
 
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "product_att_value", schema = "public", catalog = "site_test")
-@IdClass(ProductAttValuePK.class)
-public class ProductAttValue {
-    private int pId;
-    private int aId;
-    private String attValue;
+public class ProductAttValue implements Serializable {
 
     @Id
-    @Column(name = "p_id")
-    public int getpId() {
-        return pId;
-    }
-
-    public void setpId(int pId) {
-        this.pId = pId;
-    }
+    @ManyToOne
+    @JoinColumn(name = "pr_id")
+    private Product product;
 
     @Id
-    @Column(name = "a_id")
-    public int getaId() {
-        return aId;
-    }
+    @ManyToOne
+    @JoinColumn(name = "att_id")
+    private ProductAttribute attribute;
 
-    public void setaId(int aId) {
-        this.aId = aId;
-    }
+    @NotNull
+    private String value;
 
-    @Basic
-    @Column(name = "att_value")
-    public String getAttValue() {
-        return attValue;
-    }
-
-    public void setAttValue(String attValue) {
-        this.attValue = attValue;
+    public ProductAttValue() {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ProductAttValue that = (ProductAttValue) o;
-
-        if (pId != that.pId) return false;
-        if (aId != that.aId) return false;
-        if (attValue != null ? !attValue.equals(that.attValue) : that.attValue != null) return false;
-
-        return true;
+    public String toString() {
+        return "\nProductAttValue{" +
+                "product=" + product +
+                ", attribute=" + attribute +
+                ", value='" + value + '\'' +
+                '}';
     }
 
-    @Override
-    public int hashCode() {
-        int result = pId;
-        result = 31 * result + aId;
-        result = 31 * result + (attValue != null ? attValue.hashCode() : 0);
-        return result;
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public ProductAttribute getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(ProductAttribute attribute) {
+        this.attribute = attribute;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

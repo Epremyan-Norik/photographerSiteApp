@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.photographer.app.mapper.BlogTextMapper">
+
+    <!--название метода-->
+    <select
+            id="getBlogTextById"
+            parameterType="java.lang.Long"
+            resultType="com.photographer.app.mapper.BlogText">
+        select *
+        from blogtxt
+        where id = ${id}
+    </select>
+
+    <select
+            id="getAllFromBlogText"
+            parameterType="java.lang.Long"
+            resultType="com.photographer.app.mapper.BlogText">
+        select *
+        from blogtxt
+    </select>
+
+    <select id="insertBlogText" parameterType="com.photographer.app.mapper.BlogText" resultType = "int">
+        INSERT INTO blogtxt(id, anons, full_text)
+        VALUES ( ${id}, '${anons}', '${full_text}')
+            RETURNING id
+    </select>
+
+    <update id = "updateBlogText" parameterType = "com.photographer.app.mapper.BlogText">
+        UPDATE blogtxt SET anons = '${anons}', full_text = '${full_text}'
+        WHERE id = #{id};
+    </update>
+
+    <delete id="deleteBlogPostById" parameterType="java.lang.Long">
+        delete from blogtxt where id = ${id}
+    </delete>
+
+
+</mapper>

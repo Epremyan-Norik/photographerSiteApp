@@ -1,64 +1,62 @@
 package com.photographer.app.models;
 
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "order_att_value", schema = "public", catalog = "site_test")
-@IdClass(OrderAttValuePK.class)
-public class OrderAttValue {
-    private int orderId;
-    private int attId;
-    private String attValue;
+public class OrderAttValue implements Serializable {
 
     @Id
-    @Column(name = "order_id")
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Orders order;
 
     @Id
-    @Column(name = "att_id")
-    public int getAttId() {
-        return attId;
-    }
+    @ManyToOne
+    @JoinColumn
+    private OrderAttribute attribute;
 
-    public void setAttId(int attId) {
-        this.attId = attId;
-    }
-
-    @Basic
-    @Column(name = "att_value")
-    public String getAttValue() {
-        return attValue;
-    }
-
-    public void setAttValue(String attValue) {
-        this.attValue = attValue;
-    }
+    @NotNull
+    private String value;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        OrderAttValue that = (OrderAttValue) o;
-
-        if (orderId != that.orderId) return false;
-        if (attId != that.attId) return false;
-        if (attValue != null ? !attValue.equals(that.attValue) : that.attValue != null) return false;
-
-        return true;
+    public String toString() {
+        return "\nOrderAttValue{" +
+                "order=" + order +
+                ", attribute=" + attribute +
+                ", value='" + value + '\'' +
+                '}';
     }
 
-    @Override
-    public int hashCode() {
-        int result = orderId;
-        result = 31 * result + attId;
-        result = 31 * result + (attValue != null ? attValue.hashCode() : 0);
-        return result;
+    public Orders getOrder() {
+        return order;
+    }
+
+    public void setOrder(Orders order) {
+        this.order = order;
+    }
+
+    public OrderAttribute getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(OrderAttribute attribute) {
+        this.attribute = attribute;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public OrderAttValue() {
     }
 }

@@ -1,28 +1,24 @@
 package com.photographer.app.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class BlogPostOld {
+@Table(name = "t_news")
+public class NewsPost {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String title, anons, text, author;
+    private String title, anons, text;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
+
     private int view;
 
-    public BlogPostOld(String title, String anons, String text) {
-        this.title = title;
-        this.anons = anons;
-        this.text = text;
+    public NewsPost() {
     }
-
-    public BlogPostOld() {
-    }
-
 
     public Long getId() {
         return id;
@@ -56,11 +52,11 @@ public class BlogPostOld {
         this.text = text;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 

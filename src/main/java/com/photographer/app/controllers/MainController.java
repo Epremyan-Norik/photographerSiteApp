@@ -10,6 +10,8 @@ class MainController {
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("title", "Главная страница");
+        model.addAttribute("visible_login", "invisible");
+        model.addAttribute("visible_reg", "invisible");
         return "home";
     }
     @GetMapping("/about")

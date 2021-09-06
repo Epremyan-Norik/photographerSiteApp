@@ -1,27 +1,48 @@
 package com.photographer.app.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
-public class Product {
-    private int id;
-    private String name;
+public class Product implements Serializable {
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    private Long id;
+
+    @NotNull
+    private String name;
+
+    @Transient
+    @OneToMany(mappedBy = "product")
+    private Set<ProductAttValue> allAttOfProduct;
+
+    @Transient
+    @OneToMany(mappedBy = "product")
+    private Set<OrderItems> orderWithProduct;
+
+    @Override
+    public String toString() {
+        return "\nProduct{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", allAttOfProduct=" + allAttOfProduct +
+                '}';
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -30,23 +51,14 @@ public class Product {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Product product = (Product) o;
-
-        if (id != product.id) return false;
-        if (name != null ? !name.equals(product.name) : product.name != null) return false;
-
-        return true;
+    public Set<ProductAttValue> getAllAttOfProduct() {
+        return allAttOfProduct;
     }
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
+    public void setAllAttOfProduct(Set<ProductAttValue> allAttOfProduct) {
+        this.allAttOfProduct = allAttOfProduct;
+    }
+
+    public Product() {
     }
 }

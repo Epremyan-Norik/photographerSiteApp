@@ -1,9 +1,12 @@
 package com.photographer.app.controllers;
 
 
-import com.photographer.app.models.BlogPostOld;
-import com.photographer.app.repo.BlogPostRepository;
+import com.photographer.app.mapper.BlogText;
+import com.photographer.app.modelsNew.BlogPost;
+import com.photographer.app.repo.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +21,12 @@ import java.util.Optional;
 public class BlogController {
 
     @Autowired
-    private BlogPostRepository postRepository;
+    private Repository postRepository;
 
     @GetMapping("/blog")
     public String blog(Model model) {
         //model.addAttribute("title", "Главная страница");
-        Iterable<BlogPostOld> posts = postRepository.findAll();
+        Iterable<BlogPost> posts = postRepository.findAllBlogPost();
         model.addAttribute("posts", posts);
         return "blog";
     }
@@ -38,19 +41,24 @@ public class BlogController {
                           @RequestParam String anons,
                           @RequestParam String full_text,
                           Model model){
-        BlogPostOld post = new BlogPostOld(title, anons, full_text);
-        postRepository.save(post);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        BlogPost post = new BlogPost(title, anons, full_text, currentPrincipalName);
+        postRepository.saveBlogPost(post);
         return "redirect:/blog";
     }
 
     @GetMapping("/blog/{id}")
-    public String postView(@PathVariable(value = "id") long id, Model model) {
-        if(!postRepository.existsById(id)){
+    public String postView(@PathVariable(value = "id") int id, Model model) {
+        if(!postRepository.blogPostExistsById(id)){
             return "redirect:/blog";
         }
-        Optional<BlogPostOld> post = postRepository.findById(id);
-        ArrayList<BlogPostOld> res = new ArrayList<>();
+        Optional<BlogPost> post = postRepository.findBlogPostById(id);
+        ArrayList<BlogPost> res = new ArrayList<>();
+        post.ifPresent(BlogPost::incrementView);
+        post.ifPresent(System.out::println);
         post.ifPresent(res::add);
+        post.ifPresent(postRepository::saveBlogPost);
         model.addAttribute("post", res);
         return "post-detail";
     }
@@ -58,35 +66,35 @@ public class BlogController {
 
 
     @GetMapping("/blog/{id}/edit")
-    public String editPost(@PathVariable(value = "id") long id, Model model) {
-        if(!postRepository.existsById(id)){
+    public String editPost(@PathVariable(value = "id") int id, Model model) {
+        if(!postRepository.blogPostExistsById(id)){
             return "redirect:/blog";
         }
-        Optional<BlogPostOld> post = postRepository.findById(id);
-        ArrayList<BlogPostOld> res = new ArrayList<>();
+        Optional<BlogPost> post = postRepository.findBlogPostById(id);
+        ArrayList<BlogPost> res = new ArrayList<>();
         post.ifPresent(res::add);
         model.addAttribute("post", res);
         return "post-edit";
     }
 
     @PostMapping("/blog/{id}/edit")
-    public String blogPostUpdate(@PathVariable(value = "id") long id,
+    public String blogPostUpdate(@PathVariable(value = "id") int id,
                                  @RequestParam String title,
                                  @RequestParam String anons,
                                  @RequestParam String full_text,
                                  Model model){
-        BlogPostOld post = postRepository.findById(id).orElseThrow();
+        BlogPost post = postRepository.findBlogPostById(id).orElseThrow();
         post.setTitle(title);
         post.setAnons(anons);
         post.setText(full_text);
-        postRepository.save(post);
+        postRepository.saveBlogPost(post);
         return "redirect:/blog";
     }
 
     @PostMapping("/blog/{id}/remove")
-    public String removePost(@PathVariable(value = "id") long id, Model model) {
-        BlogPostOld post = postRepository.findById(id).orElseThrow();
-        postRepository.delete(post);
+    public String removePost(@PathVariable(value = "id") int id, Model model) {
+        BlogPost post = postRepository.findBlogPostById(id).orElseThrow();
+        postRepository.saveBlogPost(post);
         return "redirect:/blog";
     }
 }
