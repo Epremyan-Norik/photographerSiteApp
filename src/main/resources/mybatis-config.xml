@@ -23,6 +23,8 @@
         <mapper resource="mapper/ValueMapper.xml"/>
         <mapper resource="mapper/EntityListMapper.xml"/>
         <mapper resource="mapper/BlogTextMapper.xml"/>
+        <mapper resource="mapper/ProductMapper.xml"/>
+        <mapper resource="mapper/CartItemsMapper.xml"/>
 
     </mappers>
 </configuration>

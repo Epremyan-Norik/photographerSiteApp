@@ -3,6 +3,7 @@ package com.photographer.app.repo;
 
 import com.photographer.app.mapper.*;
 import com.photographer.app.modelsNew.BlogPost;
+import com.photographer.app.modelsNew.Product;
 import com.photographer.app.modelsNew.User;
 import com.photographer.app.modelsNew.Role;
 import org.apache.ibatis.io.Resources;
@@ -28,6 +29,7 @@ public class Repository {
     private AttributeMapper attributeMapper;
     private EntityListMapper entityListMapper;
     private BlogTextMapper blogTextMapper;
+    private ProductMapper productMapper;
     private Reader reader;
     private SqlSession sqlSession;
     private String resource = "mybatis-config.xml";
@@ -539,6 +541,7 @@ public class Repository {
 
     }
 
+
     //---------------------------------- Object BlogPost
 
 
@@ -789,5 +792,157 @@ public class Repository {
 
 
         return Optional.ofNullable(blogPost);
+    }
+
+
+    //----------------------------------Object Product
+
+    public List<Product> findAllProducts(){
+        List<Product> list = null;
+        try {
+            reader = Resources
+                    .getResourceAsReader("mybatis-config.xml");
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+            SqlSession sqlSession = sqlSessionFactory.openSession();
+            productMapper = sqlSession.getMapper(ProductMapper.class);
+
+            list = productMapper.getAllProducts();
+            sqlSession.commit();
+            sqlSession.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            list = null;
+        }
+
+        return list;
+    }
+
+    public Product findProductById(long id){
+        Product result = null;
+        try {
+            reader = Resources
+                    .getResourceAsReader("mybatis-config.xml");
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+            SqlSession sqlSession = sqlSessionFactory.openSession();
+            productMapper = sqlSession.getMapper(ProductMapper.class);
+
+            result = productMapper.getProductById(id);
+            sqlSession.commit();
+            sqlSession.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            result = null;
+        }
+
+        return result;
+    }
+
+    public int saveProduct(Product product){
+        int result = 0;
+        try {
+            Product productFromDB = findProductById(product.getId());
+            reader = Resources
+                    .getResourceAsReader("mybatis-config.xml");
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+            SqlSession sqlSession = sqlSessionFactory.openSession();
+            entityListMapper = sqlSession.getMapper(EntityListMapper.class);
+            entityMapper = sqlSession.getMapper(EntityMapper.class);
+            attributeMapper = sqlSession.getMapper(AttributeMapper.class);
+            valueMapper = sqlSession.getMapper(ValueMapper.class);
+            productMapper = sqlSession.getMapper(ProductMapper.class);
+
+            if(productFromDB!=null){
+                Value updatedValue = new Value();
+
+                Attribute name = attributeMapper.getAttributeByName("product_name");
+                updatedValue.setValue(product.getName());
+                updatedValue.setAttId(name.getId());
+                updatedValue.setEntityId(product.getId());
+                valueMapper.updateValue(updatedValue);
+
+                Attribute price = attributeMapper.getAttributeByName("product_price");
+                updatedValue.setValue(String.valueOf(product.getPrice()));
+                updatedValue.setAttId(price.getId());
+                valueMapper.updateValue(updatedValue);
+
+                Attribute active = attributeMapper.getAttributeByName("product_active");
+                updatedValue.setValue(String.valueOf(product.isActive()));
+                updatedValue.setAttId(active.getId());
+                valueMapper.updateValue(updatedValue);
+
+                Attribute description = attributeMapper.getAttributeByName("product_description");
+                updatedValue.setValue(product.getDescription());
+                updatedValue.setAttId(description.getId());
+                valueMapper.updateValue(updatedValue);
+
+
+
+                sqlSession.commit();
+                sqlSession.close();
+
+                return 1;
+            }
+
+            EntityList entityProduct = entityListMapper.getEntityByName("product");
+            Entity insertedEntity = new Entity();
+            insertedEntity.setType_id(entityProduct.getId());
+            product.setId(entityMapper.insertEntity(insertedEntity));
+
+            List<Attribute> blogPostAttributes = attributeMapper.getAllAttributesByType(entityProduct.getId());
+
+            Value insertedValue = new Value();
+            insertedValue.setEntityId(product.getId());
+            for (Attribute att : blogPostAttributes) {
+                insertedValue.setAttId(att.getId());
+                switch (att.getAttName()) {
+                    case "product_name": {
+                        insertedValue.setValue(product.getName());
+                        break;
+                    }
+                    case "product_price": {
+                        insertedValue.setValue(String.valueOf(product.getPrice()));
+                        break;
+                    }
+                    case "product_active": {
+                        insertedValue.setValue(String.valueOf(product.isActive()));
+                        break;
+                    }
+                    case "product_description": {
+                        insertedValue.setValue(product.getDescription());
+                        break;
+                    }
+                }
+                valueMapper.insertValue(insertedValue);
+            }
+            sqlSession.commit();
+            sqlSession.close();
+            result = 1;
+        } catch (IOException e) {
+            e.printStackTrace();
+            result = 0;
+        }
+
+        return result;
+
+    }
+
+    public int deleteProductById(long id){
+        int result;
+        try {
+            reader = Resources
+                    .getResourceAsReader("mybatis-config.xml");
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+            SqlSession sqlSession = sqlSessionFactory.openSession();
+            entityMapper = sqlSession.getMapper(EntityMapper.class);
+
+            result = entityMapper.deleteEntityById(id);
+            sqlSession.commit();
+            sqlSession.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            result = 0;
+        }
+
+        return  result;
     }
 }

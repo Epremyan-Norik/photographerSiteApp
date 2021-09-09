@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.photographer.app.mapper.CartItemMapper">
+
+    <!--название метода-->
+    <select
+            id="getCartItemById"
+            resultType="com.photographer.app.modelsNew.CartItem">
+        select * from cart_items where id = ${id}
+    </select>
+
+    <select id="getUserCartItems" parameterType="java.lang.Long" resultType="com.photographer.app.modelsNew.CartItem">
+        select * from cart_items where en_id = ${en_id}
+    </select>
+
+    <insert id="insertCartItem" parameterType="com.photographer.app.modelsNew.CartItem" >
+        insert into cart_items(en_id, guest_id, pr_id, counter)
+        values(${en_id}, ${guest_id}, ${pr_id}, ${counter})
+    </insert>
+
+    <update id="updateCartItem" parameterType="com.photographer.app.modelsNew.CartItem" >
+        update cart_items
+        set en_id = ${en_id},
+            guest_id = ${guest_id},
+            pr_id = ${pr_id},
+            counter = ${counter}
+    </update>
+
+    <delete id="deleteCartItemById" parameterType="java.lang.Long" >
+        delete cart_items where id = ${id}
+    </delete>
+
+    <delete id="deleteAllUserCartItems" parameterType="java.lang.Long" >
+        delete cart_items where en_id = ${en_id}
+    </delete>
+
+    <delete id="deleteAllGuestCartItems" parameterType="java.lang.Long" >
+        delete cart_items where guest_id = ${guest_id}
+    </delete>
+
+
+</mapper>

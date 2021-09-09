@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
+    <link href="../static/css/main.css" th:href="@{/css/no-fixedNav.css}" rel="stylesheet"/>
+</head>
+<body>
+<header th:insert="blocks/header :: header">
+</header>
+
+<div class="container mb-5">
+    <hr>
+    <div class="row">
+        <div class="col-lg-3 col-sm-3 col-xs-12" style="height: 100px; line-height: 100px;">
+            <!--<img  src="ссылка на фото" style="width: 80px; height: 80px;  " /> -->
+        </div>
+        <div  class="col-lg-3 col-sm-3 col-xs-12 mob-fix" style="height: 100px; line-height: 100px;">
+            Товар 1
+        </div>
+        <div class="col-lg-2 col-sm-2 col-xs-12 mob-fix" style="height: 100px; line-height: 100px;">
+            Цена
+        </div>
+        <div class="col-lg-1 col-sm-2 col-xs-12 mob-fix" style="height: 100px; line-height: 100px;">
+            Количество: 1
+        </div>
+        <div class="col-lg-3 col-sm-2 col-xs-12 mob-fix" style="height: 100px; line-height: 100px;">
+            Удалить
+        </div>
+    </div>
+
+    <hr>
+    <div style="width: 100%; text-align: right; margin-left: -10%;">
+        <div style="width: 50%; float: right;">
+            <button class="btn btn-primary">Оформить заказ</button>
+        </div>
+    </div>
+</div>
+
+
+<footer th:insert="blocks/footer :: footer">
+</footer>
+
+
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.12.9-1/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.1.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

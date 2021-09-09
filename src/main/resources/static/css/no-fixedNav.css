@@ -70,7 +70,7 @@ header .nav-item a:hover::after{
 }
 
 .container{
-    max-width: 900px;
+    max-width: 1200px;
     text-align: justify;
 }
 #profile-img{
@@ -156,4 +156,41 @@ header .nav-item a:hover::after{
     border-radius: 5%;
     font-weight: bold;
     color: black;
+}
+
+.services{
+    margin-top: 10px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.card{
+    margin-left: 30px;
+    margin-bottom: 30px;
+    background-color: #212529;
+    color:#879d9e;
+    box-shadow:0 0 10px red;
+
+}
+
+
+.baskets {
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.baskets li {
+    list-style-type: none;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@media (max-device-width: 768px){
+    .mob-fix {
+        height: auto !important;
+        line-height: 20px !important;
+        text-align: center;
+    }
 }
