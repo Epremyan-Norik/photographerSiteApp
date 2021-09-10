@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**", "/blog/add", "/blog/edit").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/news").hasRole("USER")
                 //Доступ разрешен всем пользователей
-                .antMatchers("/", "/resources/**", "/about", "/linktree","/cart", "/check").permitAll()
+                .antMatchers("/", "/resources/**", "/about", "/linktree","/cart", "/check", "/getGuestId").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .anyRequest().authenticated()
@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 //Перенарпавление на главную страницу после успешного входа
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/loading-user")
                 .permitAll()
                 .and()
                 .logout()

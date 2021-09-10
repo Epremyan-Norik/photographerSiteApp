@@ -2,14 +2,15 @@ console.log("Hello!")
 checkGuestId();
 
 async function checkGuestId() {
-    if(getCookie("guestId")==undefined) {
-        let response = await fetch('/getGuestId');
-
-        if (response.ok) {
-            let json = await response.json();
-            setCookie("guestId", json);
-            console.log(getCookie("guestId"));
-        } else {
+    if(getCookie("guestId")!= undefined) {
+        let response = await fetch('/transferGuest', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(getCookie("guestId"))
+        });
+        if (!response.ok) {
             alert("Ошибка HTTP checkGuestID: " + response.status);
         }
     }

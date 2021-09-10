@@ -16,5 +16,7 @@ public interface EntityMapper {
 
     int insertEntity(Entity entity);
 
+    int newGuest();
+
 
 }

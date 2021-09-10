@@ -15,6 +15,10 @@
         select * from cart_items where en_id = ${en_id}
     </select>
 
+    <select id="getGuestCartItems" parameterType="java.lang.Long" resultType="com.photographer.app.modelsNew.CartItem">
+        select * from cart_items where guest_id = ${guest_id}
+    </select>
+
     <insert id="insertCartItem" parameterType="com.photographer.app.modelsNew.CartItem" >
         insert into cart_items(en_id, guest_id, pr_id, counter)
         values(${en_id}, ${guest_id}, ${pr_id}, ${counter})

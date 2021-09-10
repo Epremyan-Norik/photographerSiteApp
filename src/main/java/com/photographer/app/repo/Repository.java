@@ -2,10 +2,7 @@ package com.photographer.app.repo;
 
 
 import com.photographer.app.mapper.*;
-import com.photographer.app.modelsNew.BlogPost;
-import com.photographer.app.modelsNew.Product;
-import com.photographer.app.modelsNew.User;
-import com.photographer.app.modelsNew.Role;
+import com.photographer.app.modelsNew.*;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -30,11 +27,64 @@ public class Repository {
     private EntityListMapper entityListMapper;
     private BlogTextMapper blogTextMapper;
     private ProductMapper productMapper;
+    private CartItemMapper cartItemMapper;
     private Reader reader;
     private SqlSession sqlSession;
     private String resource = "mybatis-config.xml";
 
     public Repository() {
+    }
+
+
+    private boolean initConnection(){
+        boolean result = true;
+        try {
+            reader = Resources
+                    .getResourceAsReader("mybatis-config.xml");
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+            SqlSession sqlSession = sqlSessionFactory.openSession();
+            attributeMapper = sqlSession.getMapper(AttributeMapper.class);
+            valueMapper = sqlSession.getMapper(ValueMapper.class);
+            entityMapper = sqlSession.getMapper(EntityMapper.class);
+            entityListMapper = sqlSession.getMapper(EntityListMapper.class);
+            blogTextMapper = sqlSession.getMapper(BlogTextMapper.class);
+            productMapper = sqlSession.getMapper(ProductMapper.class);
+
+
+        } catch (IOException e) {
+            result = false;
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private void cummitAndCloseConnection(){
+        sqlSession.commit();
+        sqlSession.close();
+    }
+
+    public int generateGuestId(){
+        int result = -1;
+        try {
+            reader = Resources
+                    .getResourceAsReader("mybatis-config.xml"); //Читаем файл с настройками подключения и настройками MyBatis
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+            SqlSession sqlSession = sqlSessionFactory.openSession();
+            entityMapper = sqlSession.getMapper(EntityMapper.class); //Создаем маппер, из которого и будем вызывать методы getSubscriberById и getSubscribers
+            result = entityMapper.newGuest();
+            sqlSession.commit();
+            sqlSession.close();
+            //List<Entity> entities = entityMapper.getAllEntities();
+            //Entity entity = entityMapper.getEntityById(2);
+            //System.out.println(entity);
+            //System.out.println("\nLIST");
+            //entities.forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
     }
 
     //---------------------------------- Object User
@@ -945,4 +995,59 @@ public class Repository {
 
         return  result;
     }
+
+    //----------------------------------Cart
+
+    public List<CartItem> getCartItemByUserId(long id){
+        List<CartItem> cartItems = null;
+        try {
+            reader = Resources
+                    .getResourceAsReader("mybatis-config.xml"); //Читаем файл с настройками подключения и настройками MyBatis
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+            SqlSession sqlSession = sqlSessionFactory.openSession();
+            cartItemMapper = sqlSession.getMapper(CartItemMapper.class); //Создаем маппер, из которого и будем вызывать методы getSubscriberById и getSubscribers
+            cartItems = cartItemMapper.getUserCartItems(id);
+            sqlSession.commit();
+            sqlSession.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return cartItems;
+    }
+
+    public List<CartItem> getCartItemByGuestId(long id){
+        List<CartItem> cartItems = null;
+        try {
+            reader = Resources
+                    .getResourceAsReader("mybatis-config.xml"); //Читаем файл с настройками подключения и настройками MyBatis
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+            SqlSession sqlSession = sqlSessionFactory.openSession();
+            cartItemMapper = sqlSession.getMapper(CartItemMapper.class); //Создаем маппер, из которого и будем вызывать методы getSubscriberById и getSubscribers
+            cartItems = cartItemMapper.getGuestCartItems(id);
+            sqlSession.commit();
+            sqlSession.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return cartItems;
+    }
+
+    public void updateCartItem(CartItem cartItem){
+        try {
+            reader = Resources
+                    .getResourceAsReader("mybatis-config.xml"); //Читаем файл с настройками подключения и настройками MyBatis
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+            SqlSession sqlSession = sqlSessionFactory.openSession();
+            cartItemMapper = sqlSession.getMapper(CartItemMapper.class); //Создаем маппер, из которого и будем вызывать методы getSubscriberById и getSubscribers
+            cartItemMapper.updateCartItem(cartItem);
+            sqlSession.commit();
+            sqlSession.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

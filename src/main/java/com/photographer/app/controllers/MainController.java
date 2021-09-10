@@ -26,4 +26,11 @@ class MainController {
         return "linktree";
     }
 
+
+    @GetMapping("/loading-user")
+    public String loading(Model model) {
+        model.addAttribute("title", "Подождите");
+        return "loading-user";
+    }
+
 }

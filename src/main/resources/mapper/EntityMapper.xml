@@ -36,4 +36,8 @@
         RETURNING id
     </select>
 
+
+    <select id="newGuest" resultType = "int">
+        insert into guest_table DEFAULT VALUES RETURNING id;
+    </select>
 </mapper>
