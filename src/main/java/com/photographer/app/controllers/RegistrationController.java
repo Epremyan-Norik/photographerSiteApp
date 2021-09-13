@@ -1,7 +1,7 @@
 package com.photographer.app.controllers;
 
 
-import com.photographer.app.modelsNew.User;
+import com.photographer.app.model.User;
 
 import com.photographer.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.photographer.app.mapper;
 
-import com.photographer.app.modelsNew.Product;
+import com.photographer.app.model.Product;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.photographer.app.mapper;
 
-import com.photographer.app.modelsNew.CartItem;
+import com.photographer.app.model.CartItem;
 
 import java.util.List;
 

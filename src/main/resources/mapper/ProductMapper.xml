@@ -7,11 +7,11 @@
     <!--название метода-->
     <select
             id="getAllProducts"
-            resultType="com.photographer.app.modelsNew.Product">
+            resultType="com.photographer.app.model.Product">
         select * from product
     </select>
 
-    <select id="getProductById" parameterType="java.lang.Long" resultType="com.photographer.app.modelsNew.Product">
+    <select id="getProductById" parameterType="java.lang.Long" resultType="com.photographer.app.model.Product">
         select *
         from product where id = ${id}
     </select>

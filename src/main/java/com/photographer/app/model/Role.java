@@ -1,4 +1,4 @@
-package com.photographer.app.modelsNew;
+package com.photographer.app.model;
 
 import org.springframework.security.core.GrantedAuthority;
 

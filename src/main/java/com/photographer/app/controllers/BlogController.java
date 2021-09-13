@@ -1,8 +1,7 @@
 package com.photographer.app.controllers;
 
 
-import com.photographer.app.mapper.BlogText;
-import com.photographer.app.modelsNew.BlogPost;
+import com.photographer.app.model.BlogPost;
 import com.photographer.app.repo.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

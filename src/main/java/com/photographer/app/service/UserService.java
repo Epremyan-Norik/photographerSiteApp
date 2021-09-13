@@ -1,7 +1,7 @@
 package com.photographer.app.service;
 
-import com.photographer.app.modelsNew.Role;
-import com.photographer.app.modelsNew.User;
+import com.photographer.app.model.Role;
+import com.photographer.app.model.User;
 import com.photographer.app.repo.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +14,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {

@@ -1,9 +1,9 @@
 package com.photographer.app.controllers;
 
-import com.photographer.app.modelsNew.CartItem;
-import com.photographer.app.modelsNew.CartItemForUI;
-import com.photographer.app.modelsNew.Product;
-import com.photographer.app.modelsNew.User;
+import com.photographer.app.model.CartItem;
+import com.photographer.app.model.CartItemForUI;
+import com.photographer.app.model.Product;
+import com.photographer.app.model.User;
 import com.photographer.app.repo.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -11,13 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static java.lang.Math.abs;
 

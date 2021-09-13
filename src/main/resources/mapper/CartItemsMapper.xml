@@ -7,29 +7,29 @@
     <!--название метода-->
     <select
             id="getCartItemById"
-            resultType="com.photographer.app.modelsNew.CartItem">
+            resultType="com.photographer.app.model.CartItem">
         select * from cart_items where id = ${id}
     </select>
 
-    <select id="getUserCartItems" parameterType="java.lang.Long" resultType="com.photographer.app.modelsNew.CartItem">
+    <select id="getUserCartItems" parameterType="java.lang.Long" resultType="com.photographer.app.model.CartItem">
         select * from cart_items where en_id = ${en_id}
     </select>
 
-    <select id="getGuestCartItems" parameterType="java.lang.Long" resultType="com.photographer.app.modelsNew.CartItem">
+    <select id="getGuestCartItems" parameterType="java.lang.Long" resultType="com.photographer.app.model.CartItem">
         select * from cart_items where guest_id = ${guest_id}
     </select>
 
-    <insert id="insertUserCartItem" parameterType="com.photographer.app.modelsNew.CartItem" >
+    <insert id="insertUserCartItem" parameterType="com.photographer.app.model.CartItem" >
         insert into cart_items(en_id, pr_id, counter)
         values(${en_id},  ${pr_id}, ${counter})
     </insert>
 
-    <insert id="insertGuestCartItem" parameterType="com.photographer.app.modelsNew.CartItem" >
+    <insert id="insertGuestCartItem" parameterType="com.photographer.app.model.CartItem" >
         insert into cart_items( guest_id, pr_id, counter)
         values( ${guest_id}, ${pr_id}, ${counter})
     </insert>
 
-    <update id="updateCartItem" parameterType="com.photographer.app.modelsNew.CartItem" >
+    <update id="updateCartItem" parameterType="com.photographer.app.model.CartItem" >
         update cart_items
         set en_id = ${en_id},
             guest_id = ${guest_id},

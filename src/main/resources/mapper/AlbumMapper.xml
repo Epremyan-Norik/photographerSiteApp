@@ -7,7 +7,7 @@
     <!--название метода-->
     <select
             id="getAlbums"
-            resultType="com.photographer.app.modelsNew.Album">
+            resultType="com.photographer.app.model.Album">
         select * from albums_tree
     </select>
 

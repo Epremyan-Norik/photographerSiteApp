@@ -1,10 +1,7 @@
 package com.photographer.app;
 
-import com.photographer.app.modelsNew.Album;
-import com.photographer.app.modelsNew.Product;
-import com.photographer.app.modelsNew.User;
+import com.photographer.app.model.Album;
 import com.photographer.app.repo.Repository;
-import org.jboss.jandex.PrimitiveType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

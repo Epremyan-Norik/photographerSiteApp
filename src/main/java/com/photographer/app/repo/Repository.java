@@ -2,7 +2,7 @@ package com.photographer.app.repo;
 
 
 import com.photographer.app.mapper.*;
-import com.photographer.app.modelsNew.*;
+import com.photographer.app.model.*;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
