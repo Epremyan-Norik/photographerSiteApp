@@ -7,6 +7,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -28,34 +29,37 @@ public class Repository {
     private BlogTextMapper blogTextMapper;
     private ProductMapper productMapper;
     private CartItemMapper cartItemMapper;
+    private AlbumMapper albumMapper;
     private Reader reader;
     private SqlSession sqlSession;
     private String resource = "mybatis-config.xml";
 
+
+    @Autowired
     public Repository() {
-    }
-
-
-    private boolean initConnection(){
-        boolean result = true;
         try {
             reader = Resources
                     .getResourceAsReader("mybatis-config.xml");
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
-            SqlSession sqlSession = sqlSessionFactory.openSession();
-            attributeMapper = sqlSession.getMapper(AttributeMapper.class);
-            valueMapper = sqlSession.getMapper(ValueMapper.class);
-            entityMapper = sqlSession.getMapper(EntityMapper.class);
-            entityListMapper = sqlSession.getMapper(EntityListMapper.class);
-            blogTextMapper = sqlSession.getMapper(BlogTextMapper.class);
-            productMapper = sqlSession.getMapper(ProductMapper.class);
-
-
-        } catch (IOException e) {
-            result = false;
+        }catch (IOException e){
             e.printStackTrace();
         }
-        return result;
+
+    }
+
+
+    private boolean initConnection(){
+        //boolean result = true;
+        sqlSession = sqlSessionFactory.openSession();
+        attributeMapper = sqlSession.getMapper(AttributeMapper.class);
+        valueMapper = sqlSession.getMapper(ValueMapper.class);
+        entityMapper = sqlSession.getMapper(EntityMapper.class);
+        entityListMapper = sqlSession.getMapper(EntityListMapper.class);
+        blogTextMapper = sqlSession.getMapper(BlogTextMapper.class);
+        productMapper = sqlSession.getMapper(ProductMapper.class);
+        cartItemMapper = sqlSession.getMapper(CartItemMapper.class);
+        albumMapper = sqlSession.getMapper(AlbumMapper.class);
+        return true;
     }
 
     private void cummitAndCloseConnection(){
@@ -1048,6 +1052,44 @@ public class Repository {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public int insertCartItem(CartItem cartItem){
+        initConnection();
+        int result;
+        if(cartItem.getEn_id()<0){
+            result = cartItemMapper.insertGuestCartItem(cartItem);
+        }
+        else {
+            result = cartItemMapper.insertUserCartItem(cartItem);
+        }
+        cummitAndCloseConnection();
+        return result;
+    }
+
+    public CartItem getCartItemById(long id){
+        initConnection();
+        CartItem cartItem = cartItemMapper.getCartItemById(id);
+        cummitAndCloseConnection();
+        return cartItem;
+    }
+
+    public int deleteCartItemById(long id){
+        initConnection();
+        int result = cartItemMapper.deleteCartItemById(id);
+        cummitAndCloseConnection();
+        return result;
+    }
+
+
+
+    //-------------------------------------Albums
+
+    public List<Album> getAlbums(){
+        initConnection();
+        List<Album> result = albumMapper.getAlbums();
+        cummitAndCloseConnection();
+        return result;
     }
 
 }

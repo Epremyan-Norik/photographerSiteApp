@@ -19,9 +19,14 @@
         select * from cart_items where guest_id = ${guest_id}
     </select>
 
-    <insert id="insertCartItem" parameterType="com.photographer.app.modelsNew.CartItem" >
-        insert into cart_items(en_id, guest_id, pr_id, counter)
-        values(${en_id}, ${guest_id}, ${pr_id}, ${counter})
+    <insert id="insertUserCartItem" parameterType="com.photographer.app.modelsNew.CartItem" >
+        insert into cart_items(en_id, pr_id, counter)
+        values(${en_id},  ${pr_id}, ${counter})
+    </insert>
+
+    <insert id="insertGuestCartItem" parameterType="com.photographer.app.modelsNew.CartItem" >
+        insert into cart_items( guest_id, pr_id, counter)
+        values( ${guest_id}, ${pr_id}, ${counter})
     </insert>
 
     <update id="updateCartItem" parameterType="com.photographer.app.modelsNew.CartItem" >
@@ -33,15 +38,15 @@
     </update>
 
     <delete id="deleteCartItemById" parameterType="java.lang.Long" >
-        delete cart_items where id = ${id}
+        delete from cart_items where id = ${id}
     </delete>
 
     <delete id="deleteAllUserCartItems" parameterType="java.lang.Long" >
-        delete cart_items where en_id = ${en_id}
+        delete from cart_items where en_id = ${en_id}
     </delete>
 
     <delete id="deleteAllGuestCartItems" parameterType="java.lang.Long" >
-        delete cart_items where guest_id = ${guest_id}
+        delete from cart_items where guest_id = ${guest_id}
     </delete>
 
 

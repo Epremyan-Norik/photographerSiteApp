@@ -25,6 +25,7 @@
         <mapper resource="mapper/BlogTextMapper.xml"/>
         <mapper resource="mapper/ProductMapper.xml"/>
         <mapper resource="mapper/CartItemsMapper.xml"/>
+        <mapper resource="mapper/AlbumMapper.xml"/>
 
     </mappers>
 </configuration>

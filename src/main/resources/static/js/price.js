@@ -1,9 +1,9 @@
 console.log("Hello!")
-transferGuestCartToUser();
+//transferGuestCartToUser();
 
-async function transferGuestCartToUser() {
+async function addToList(productId) {
     if(getCookie("guestId")!= undefined) {
-        let response = await fetch('/transferGuest', {
+        let response = await fetch('/addToCart/'+productId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -12,9 +12,12 @@ async function transferGuestCartToUser() {
         });
         if (!response.ok) {
             alert("Ошибка HTTP checkGuestID: " + response.status);
-        }
-        else {
-            document.location.href = '/'
+        } else{
+            let json = response.json();
+            console.log("Ответ:" + json);
+            let addproduct = document.getElementById("add"+productId);
+            addproduct.innerText = "Добавлен";
+            addproduct.style.backgroundColor = 'red';
         }
     }
 }

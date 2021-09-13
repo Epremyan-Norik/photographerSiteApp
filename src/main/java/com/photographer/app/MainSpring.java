@@ -1,5 +1,6 @@
 package com.photographer.app;
 
+import com.photographer.app.modelsNew.Album;
 import com.photographer.app.modelsNew.Product;
 import com.photographer.app.modelsNew.User;
 import com.photographer.app.repo.Repository;
@@ -16,8 +17,8 @@ public class MainSpring {
 
     public static void main(String[] args) {
         Repository repository = new Repository();
-        User user = repository.findUserByUsername("admin123");
-        user.getRoles().forEach(System.out::println);
+        List<Album> albums = repository.getAlbums();
+        albums.forEach(System.out::println);
 
         SpringApplication.run(MainSpring.class, args);
     }
