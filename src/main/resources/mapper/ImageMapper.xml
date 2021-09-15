@@ -22,6 +22,11 @@
         from images where id = ${id}
     </delete>
 
+    <delete id="deleteImagesByEnId" parameterType="java.lang.Long" >
+        delete
+        from images where en_id = ${id}
+    </delete>
+
     <update id="updateImage" parameterType="com.photographer.app.model.Image" >
         update images set en_id = ${en_id}, imagebyte64 = '${imagebyte64}' where id = ${id}
     </update>

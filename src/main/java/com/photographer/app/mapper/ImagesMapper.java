@@ -8,5 +8,6 @@ public interface ImagesMapper {
     int insertImage(Image image);
     List<Image> getImagesByEnId(long id);
     int deleteImageById(long id);
+    int deleteImagesByEnId(long id);
     int updateImage(Image image);
 }

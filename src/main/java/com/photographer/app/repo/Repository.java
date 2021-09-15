@@ -1202,6 +1202,71 @@ public class Repository {
         cummitAndCloseConnection();
         return album;
     }
+    public void deleteAlbumById(long id){
+        initConnection();
+        List<Album> albums = albumMapper.getAlbums();
+        List<Album> albumToDelete = new ArrayList<>();
+        for(Album album:albums){
+            if((album.getId()==id)||(album.getP_id()==id)){
+                albumToDelete.add(album);
+            }
+        }
+
+        for(Album album:albumToDelete){
+            entityMapper.deleteEntityById(album.getId());
+            imagesMapper.deleteImagesByEnId(album.getId());
+        }
+
+
+        cummitAndCloseConnection();
+    }
+    public void addAlbum(Album album){
+        initConnection();
+        EntityList galleryAlbum = entityListMapper.getEntityByName("gallery_album");
+        Entity newAlbum = new Entity();
+        newAlbum.setType_id(galleryAlbum.getId());
+        album.setId(entityMapper.insertEntity(newAlbum));
+
+        List<Attribute> albumAtt = attributeMapper.getAllAttributesByType(galleryAlbum.getId());
+        for(Attribute att: albumAtt){
+            Value insertedAtt = new Value();
+            insertedAtt.setEntityId(album.getId());
+            insertedAtt.setAttId(att.getId());
+            switch (att.getAttName()){
+                case "gallery_album_name": { insertedAtt.setValue(album.getName());
+                    break;
+                }
+                case "gallery_album_p_id": { insertedAtt.setValue(String.valueOf(album.getP_id()));
+                    break;
+                }
+            }
+            valueMapper.insertValue(insertedAtt);
+        }
+
+        cummitAndCloseConnection();
+    }
+    public void editAlbum(Album album){
+        initConnection();
+        EntityList galleryAlbum = entityListMapper.getEntityByName("gallery_album");
+        List<Attribute> albumAtt = attributeMapper.getAllAttributesByType(galleryAlbum.getId());
+
+        for(Attribute att: albumAtt){
+            Value insertedAtt = new Value();
+            insertedAtt.setEntityId(album.getId());
+            insertedAtt.setAttId(att.getId());
+            switch (att.getAttName()){
+                case "gallery_album_name": { insertedAtt.setValue(album.getName());
+                    break;
+                }
+                case "gallery_album_p_id": { insertedAtt.setValue(String.valueOf(album.getP_id()));
+                    break;
+                }
+            }
+            valueMapper.updateValue(insertedAtt);
+        }
+
+        cummitAndCloseConnection();
+    }
 
 
     //--------------------------------------Orders

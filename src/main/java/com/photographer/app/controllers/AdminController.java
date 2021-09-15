@@ -6,6 +6,7 @@ import com.photographer.app.service.UserService;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -178,20 +179,101 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
+    @GetMapping("/admin/gallery")
+    public String viewGallery(Model model) {
+        model.addAttribute("title", "Редактирование галереи");
+        List<Album> albums =  repository.getAlbums();
+        model.addAttribute("albums", albums);
+        return "admin-gallery";
+    }
 
-    @PostMapping("/admin")
-    public String deleteUser(@RequestParam(required = true, defaultValue = "") Long userId,
-                             @RequestParam(required = true, defaultValue = "") String action,
-                             Model model) {
-        if (action.equals("delete")) {
-            userService.deleteUser(userId);
+    @RequestMapping(value = "/admin/gallery/delete/{id}", method = RequestMethod.GET)
+    public String deleteAlbum(@PathVariable(value = "id") long id) {
+        repository.deleteAlbumById(id);
+        return "redirect:/admin/gallery";
+    }
+
+
+    @RequestMapping(value = "/admin/gallery/add-album", method = RequestMethod.POST)
+    public String addProduct(@RequestParam(name = "name") String name,
+                             @RequestParam(name = "parent") long parent) {
+        if(parent==0){
+            parent = 54;
         }
-        return "redirect:/admin";
+        Album newAlbum = new Album();
+        newAlbum.setP_id(parent);
+        newAlbum.setName(name);
+        repository.addAlbum(newAlbum);
+        return "redirect:/admin/gallery";
     }
 
-    @GetMapping("/admin/gt/{userId}")
-    public String gtUser(@PathVariable("userId") Long userId, Model model) {
-        //model.addAttribute("allUsers", userService.usergtList(userId));
-        return "admin";
+    @GetMapping("/admin/gallery/edit/{id}")
+    public String editAlbum(@PathVariable(value="id") long id, Model model) {
+        model.addAttribute("title", "Редактирование альбома");
+        Album album =  repository.getAlbumById(id);
+        List<Album> albums = repository.getAlbums();
+        for(Album al: albums){
+            if(al.getId()==album.getP_id()){
+                albums.remove(al);
+                break;
+            }
+        }
+        List<Image> images = repository.getImagesByEnId(id);
+        Album parent = repository.getAlbumById(album.getP_id());
+        if(parent == null){
+            parent = new Album();
+            parent.setId(54);
+            parent.setName("Корень");
+        }
+        model.addAttribute("album", album);
+        model.addAttribute("albums", albums);
+        model.addAttribute("parent", parent);
+        model.addAttribute("images", images);
+
+
+
+        return "admin-gallery-edit";
     }
+
+    @RequestMapping(value = "/admin/gallery/edit-album{id}", method = RequestMethod.POST)
+    public String addProduct(@PathVariable(value = "id") long id,
+            @RequestParam(name = "name") String name,
+                             @RequestParam(name = "parent") long parent) {
+        if(parent==0){
+            parent = 54;
+        }
+        Album newAlbum = new Album();
+        newAlbum.setId(id);
+        newAlbum.setP_id(parent);
+        newAlbum.setName(name);
+        repository.editAlbum(newAlbum);
+        return "redirect:/admin/gallery/edit/"+String.valueOf(id);
+    }
+
+    @PostMapping("/admin/gallery/add-photo{id}")
+    public String addPhotoToAlbum(@PathVariable(value = "id") long id,
+            @RequestParam("file") MultipartFile file) throws IOException {
+        if(file.isEmpty()){
+            return "redirect:/admin/gallery/edit/"+String.valueOf(id);
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("data:image/jpeg;base64,");
+        stringBuilder.append(StringUtils.newStringUtf8(Base64.encodeBase64(file.getBytes(), false)));
+
+        Image newImage = new Image();
+        newImage.setEn_id(id);
+        newImage.setImagebyte64(stringBuilder.toString());
+        newImage.setId(repository.insertImage(newImage));
+
+        return "redirect:/admin/gallery/edit/"+String.valueOf(id);
+    }
+
+    @RequestMapping(value = "/admin/gallery/delete-photo/{a_id}/{im_id}", method = RequestMethod.GET)
+    public String deleteImage(@PathVariable(value = "im_id") long im_id,
+                              @PathVariable(value = "a_id") long a_id) {
+        repository.deleteImageById(im_id);
+        return "redirect:/admin/gallery/edit/"+String.valueOf(a_id);
+    }
+
+
 }
