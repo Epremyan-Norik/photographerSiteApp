@@ -46,25 +46,5 @@ public class RegistrationController {
         return "redirect:/";
     }
 }
-   /* @Autowired
-    private UserRepository userRepo;
 
-    @GetMapping("/registration")
-    public String registration(Model model){
-        return "registration";
-    }
-
-    @PostMapping("/registration")
-    public String addUser(User user, Model model){
-        User userFromDB = userRepo.findByUsername(user.getUsername());
-        if(userFromDB != null){
-            model.addAttribute("message", "User exist!");
-            return "registration";
-        }
-        //user.setActive(true);
-        //user.setRoles(Collections.singleton(Role.USER));
-        userRepo.save(user);
-        model.addAttribute("message", "SUCCESS");
-        return "registration";
-    }*/
 

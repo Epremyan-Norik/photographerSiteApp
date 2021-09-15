@@ -1,8 +1,9 @@
-console.log("Hello!")
-transferGuestCartToUser();
+
+getCart();
 
 async function deleteFunc(id){
     //console.log("Delete id:" +id);
+    console.log('/deleteCartItem/'+id);
     let response = await fetch('/deleteCartItem/'+id, {
         method: 'POST',
         headers: {
@@ -13,11 +14,12 @@ async function deleteFunc(id){
     if (!response.ok) {
         alert("Ошибка HTTP checkGuestID: " + response.status);
     }else{
+        console.log(response.json());
         let element = document.getElementById('row'+id);
         element.remove();
     }
 }
-async function transferGuestCartToUser() {
+async function getCart() {
     if(getCookie("guestId")!= undefined) {
         let response = await fetch('/getCart', {
             method: 'POST',
@@ -57,8 +59,8 @@ async function transferGuestCartToUser() {
 
                 let deleteElement = document.createElement('div');
                 deleteElement.className='col-lg-3 col-sm-2 col-xs-12 mob-fix btn btn-primary';
-                deleteElement.innerText="Удалить:" + json[i].id;
-                deleteElement.onclick = function (){deleteFunc(json[i].id);};
+                deleteElement.innerText="Удалить";
+                deleteElement.onclick = function (){deleteFunc(json[i].id)};
                 headElement.append(deleteElement);
 
                 elementToInsert.append(headElement);

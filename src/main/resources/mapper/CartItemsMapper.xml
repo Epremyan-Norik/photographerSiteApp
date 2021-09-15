@@ -35,6 +35,7 @@
             guest_id = ${guest_id},
             pr_id = ${pr_id},
             counter = ${counter}
+        where id = ${id}
     </update>
 
     <delete id="deleteCartItemById" parameterType="java.lang.Long" >

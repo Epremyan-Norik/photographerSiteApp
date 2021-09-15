@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/albums",
                         "/albums/**",
                         "/blog",
-                        "/blog/*").permitAll()
+                        "/blog/*", "/deleteCartItem/*").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .anyRequest().authenticated()

@@ -14,7 +14,7 @@ async function transferGuestCartToUser() {
             alert("Ошибка HTTP checkGuestID: " + response.status);
         }
         else {
-            document.location.href = '/'
+            document.location.href = '/';
         }
     }
 }

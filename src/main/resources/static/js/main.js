@@ -1,4 +1,4 @@
-console.log("Hello!")
+
 checkGuestId();
 
 async function checkGuestId() {

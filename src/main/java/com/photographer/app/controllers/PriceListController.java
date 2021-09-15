@@ -97,6 +97,7 @@ class PriceListController {
 
     @RequestMapping(value="/getCart",method = RequestMethod.POST)
     public @ResponseBody List<CartItemForUI> getCart(@RequestBody String guestId) {
+        System.out.println(guestId);
         List<CartItem> cartItems;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -149,14 +150,10 @@ class PriceListController {
     }
 
     @RequestMapping(value = "/deleteCartItem/{id}", method = RequestMethod.POST)
-    public @ResponseBody
-    boolean deleteCartItem(@PathVariable(value = "id") int cartItemId, @RequestBody String guestId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        User user = repository.findUserByUsername(currentPrincipalName);
-
+    public @ResponseBody int deleteCartItem(@PathVariable(value = "id") long cartItemId,
+                           @AuthenticationPrincipal User user,
+                           @RequestBody String guestId) {
         CartItem cartItem = repository.getCartItemById(cartItemId);
-
         if (user == null) {
             guestId = guestId.replaceAll("[^\\d.]", "");
             long guestIdInt = new Long(guestId);
@@ -168,21 +165,19 @@ class PriceListController {
                 repository.deleteCartItemById(cartItemId);
             }
         }
-        return true;
+        return 100;
     }
 
     @RequestMapping(value="/transferGuest",method = RequestMethod.POST)
     @ResponseBody
-    public String transferCartGuestToUser(@RequestBody String guestId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        User user = repository.findUserByUsername(currentPrincipalName);
+    public String transferCartGuestToUser(@AuthenticationPrincipal User user, @RequestBody String guestId) {
         guestId = guestId.replaceAll("[^\\d.]", "");
         long guestIdInt = new Long(guestId);
         List<CartItem> cartItems = repository.getCartItemByGuestId(guestIdInt);
         for(CartItem cartItem : cartItems){
             cartItem.setEn_id(user.getId());
             repository.updateCartItem(cartItem);
+
         }
         return guestId;
     }
