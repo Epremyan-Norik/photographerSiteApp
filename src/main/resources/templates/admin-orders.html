@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
+    <link href="../static/css/main.css" th:href="@{/css/no-fixedNav.css}" rel="stylesheet"/>
+</head>
+<body>
+<header th:insert="blocks/header :: header">
+</header>
+
+<div class="container mb-5">
+    <div class="cart_items">
+        <h2>Заказ</h2>
+        <hr>
+        <table class="table" style="color: white">
+            <thead>
+            <tr>
+                <th scope="col">№</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Стоимость</th>
+                <th scope="col">Статус</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="el:${orders}">
+                <th scope="row"><a th:text="${el.id}" th:href="'/admin/orders/'+${el.id}"/></th>
+                <td th:text="${el.order_dt}"></td>
+                <td th:text="${el.total}"></td>
+                <td th:text="${el.status}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -7,7 +7,6 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +15,6 @@ import java.io.Reader;
 import java.sql.Timestamp;
 
 import java.util.*;
-
 
 
 @Component
@@ -30,25 +28,26 @@ public class Repository {
     private ProductMapper productMapper;
     private CartItemMapper cartItemMapper;
     private AlbumMapper albumMapper;
+    private OrderMapper orderMapper;
+    private ImagesMapper imagesMapper;
     private Reader reader;
     private SqlSession sqlSession;
     private String resource = "mybatis-config.xml";
 
 
-    @Autowired
     public Repository() {
         try {
             reader = Resources
                     .getResourceAsReader("mybatis-config.xml");
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
 
-    private boolean initConnection(){
+    private boolean initConnection() {
         //boolean result = true;
         sqlSession = sqlSessionFactory.openSession();
         attributeMapper = sqlSession.getMapper(AttributeMapper.class);
@@ -59,15 +58,17 @@ public class Repository {
         productMapper = sqlSession.getMapper(ProductMapper.class);
         cartItemMapper = sqlSession.getMapper(CartItemMapper.class);
         albumMapper = sqlSession.getMapper(AlbumMapper.class);
+        orderMapper = sqlSession.getMapper(OrderMapper.class);
+        imagesMapper = sqlSession.getMapper(ImagesMapper.class);
         return true;
     }
 
-    private void cummitAndCloseConnection(){
+    private void cummitAndCloseConnection() {
         sqlSession.commit();
         sqlSession.close();
     }
 
-    public int generateGuestId(){
+    public int generateGuestId() {
         int result = -1;
         try {
             reader = Resources
@@ -420,7 +421,6 @@ public class Repository {
 
     }
 
-    ;
 
     public int updateValue(Value value) {
         Integer result = null;
@@ -445,7 +445,6 @@ public class Repository {
         return result;
     }
 
-    ;
 
     public Value getValueByIds(Long entityId, Long attId) {
         Value result = null;
@@ -473,7 +472,6 @@ public class Repository {
         return result;
     }
 
-    ;
 
     public List<Value> getValues() {
 
@@ -500,7 +498,6 @@ public class Repository {
 
     }
 
-    ;
 
     public EntityList getEntityById(Integer id) {
 
@@ -527,7 +524,6 @@ public class Repository {
 
     }
 
-    ;
 
     public List<EntityList> getAllAvailableEntities() {
 
@@ -593,6 +589,111 @@ public class Repository {
 
         return user;
 
+    }
+
+    public boolean setUserEmail(User user, String email , String emailConfirmCode){
+        initConnection();
+        Attribute userEmailAtt = attributeMapper.getAttributeByName("user_email");
+        Attribute userConfirmCodeAtt = attributeMapper.getAttributeByName("user_confirm_code");
+        Map<String, Long> map = new HashMap<>();
+        map.put("en_id", user.getId());
+        map.put("att_id", userEmailAtt.getId());
+
+        Value  userEmail = new Value();
+        userEmail.setValue(email);
+        userEmail.setEntityId(user.getId());
+        userEmail.setAttId(userEmailAtt.getId());
+        if(valueMapper.getValueByIds(map)==null) {
+            valueMapper.insertValue(userEmail);
+        } else {
+            valueMapper.updateValue(userEmail);
+        }
+
+        map.put("att_id", userConfirmCodeAtt.getId());
+        Value confirmCode = new Value();
+        confirmCode.setValue(emailConfirmCode);
+        confirmCode.setEntityId(user.getId());
+        confirmCode.setAttId(userConfirmCodeAtt.getId());
+        if(valueMapper.getValueByIds(map)==null) {
+            valueMapper.insertValue(confirmCode);
+        } else {
+            valueMapper.updateValue(confirmCode);
+        }
+        cummitAndCloseConnection();
+        return true;
+    }
+
+    public String getUserEmailConfirmCode(User user){
+        initConnection();
+        Attribute confirmAtt = attributeMapper.getAttributeByName("user_confirm_code");
+        Map<String, Long> map = new HashMap<>();
+        map.put("en_id", user.getId());
+        map.put("att_id", confirmAtt.getId());
+        Value confirmVal = valueMapper.getValueByIds(map);
+        cummitAndCloseConnection();
+        return confirmVal.getValue();
+    }
+
+    public void setConfirmedEmail(User user){
+        initConnection();
+
+        Attribute emailAtt = attributeMapper.getAttributeByName("user_email");
+        Attribute confirmedEmailAtt = attributeMapper.getAttributeByName("user_confirmed_email");
+
+        Map<String, Long> map = new HashMap<>();
+        map.put("en_id", user.getId());
+        map.put("att_id", emailAtt.getId());
+        Value email = valueMapper.getValueByIds(map);
+        email.setAttId(confirmedEmailAtt.getId());
+
+        map.put("att_id", confirmedEmailAtt.getId());
+        Value confEmail = valueMapper.getValueByIds(map);
+        if(confEmail!=null){
+            valueMapper.updateValue(email);
+        }else{
+            valueMapper.insertValue(email);
+        }
+
+        cummitAndCloseConnection();
+    }
+
+    public boolean emailIsConfirmed(User user){
+        boolean result=false;
+        initConnection();
+
+        Attribute emailAtt = attributeMapper.getAttributeByName("user_email");
+        Attribute confirmedEmailAtt = attributeMapper.getAttributeByName("user_confirmed_email");
+
+        Map<String, Long> map = new HashMap<>();
+        map.put("en_id", user.getId());
+        map.put("att_id", emailAtt.getId());
+        Value email = valueMapper.getValueByIds(map);
+
+        map.put("att_id", confirmedEmailAtt.getId());
+        Value confEmail = valueMapper.getValueByIds(map);
+
+        if((email!=null)&(confEmail!=null)){
+            if(email.getValue().equals(confEmail.getValue())){
+                result=true;
+            }
+        }
+
+        cummitAndCloseConnection();
+        return  result;
+    }
+    public String getUserEmail(User user){
+        initConnection();
+        Attribute emailAtt = attributeMapper.getAttributeByName("user_email");
+        Map<String, Long> map = new HashMap<>();
+        map.put("en_id", user.getId());
+        map.put("att_id", emailAtt.getId());
+        Value emailVal = valueMapper.getValueByIds(map);
+        String email = "example@post.com";
+        if(emailVal!=null){
+            email = emailVal.getValue();
+        }
+        cummitAndCloseConnection();
+        return email;
     }
 
 
@@ -679,7 +780,7 @@ public class Repository {
             blogTextMapper = sqlSession.getMapper(BlogTextMapper.class);
 
             //Optional<BlogPost> blogPostAlreadyExist = findBlogPostById(blogPost.getId());
-            if(blogPostAlreadyExist.isPresent()){
+            if (blogPostAlreadyExist.isPresent()) {
                 BlogText updatedBlogText = blogTextMapper.getBlogTextById(blogPost.getId());
                 updatedBlogText.setFull_text(blogPost.getText());
                 updatedBlogText.setAnons(blogPost.getAnons());
@@ -802,7 +903,7 @@ public class Repository {
             List<Attribute> blogPostAttributes = attributeMapper.getAllAttributesByType(entityBlogPost.getId());
             BlogText blogText = blogTextMapper.getBlogTextById(id);
             Entity entity = entityMapper.getEntityById(id);
-            if(entity==null) throw new IOException("Entity not found");
+            if (entity == null) throw new IOException("Entity not found");
 
 
             blogPost.setId(entity.getId());
@@ -838,8 +939,7 @@ public class Repository {
         } catch (IOException e) {
             e.printStackTrace();
             blogPost = null;
-        }
-        finally {
+        } finally {
             sqlSession.commit();
             sqlSession.close();
         }
@@ -851,7 +951,7 @@ public class Repository {
 
     //----------------------------------Object Product
 
-    public List<Product> findAllProducts(){
+    public List<Product> findAllProducts() {
         List<Product> list = null;
         try {
             reader = Resources
@@ -871,7 +971,7 @@ public class Repository {
         return list;
     }
 
-    public Product findProductById(long id){
+    public Product findProductById(long id) {
         Product result = null;
         try {
             reader = Resources
@@ -891,8 +991,8 @@ public class Repository {
         return result;
     }
 
-    public int saveProduct(Product product){
-        int result = 0;
+    public long saveProduct(Product product) {
+        long result = 0;
         try {
             Product productFromDB = findProductById(product.getId());
             reader = Resources
@@ -904,8 +1004,11 @@ public class Repository {
             attributeMapper = sqlSession.getMapper(AttributeMapper.class);
             valueMapper = sqlSession.getMapper(ValueMapper.class);
             productMapper = sqlSession.getMapper(ProductMapper.class);
+            imagesMapper = sqlSession.getMapper(ImagesMapper.class);
 
-            if(productFromDB!=null){
+            Image image = new Image();
+            image.setImagebyte64(product.getImage());
+            if (productFromDB != null) {
                 Value updatedValue = new Value();
 
                 Attribute name = attributeMapper.getAttributeByName("product_name");
@@ -929,18 +1032,22 @@ public class Repository {
                 updatedValue.setAttId(description.getId());
                 valueMapper.updateValue(updatedValue);
 
-
+                image.setEn_id(product.getId());
+                imagesMapper.updateImage(image);
 
                 sqlSession.commit();
                 sqlSession.close();
 
-                return 1;
+                return productFromDB.getId();
             }
 
             EntityList entityProduct = entityListMapper.getEntityByName("product");
             Entity insertedEntity = new Entity();
             insertedEntity.setType_id(entityProduct.getId());
             product.setId(entityMapper.insertEntity(insertedEntity));
+
+            image.setEn_id(product.getId());
+            imagesMapper.insertImage(image);
 
             List<Attribute> blogPostAttributes = attributeMapper.getAllAttributesByType(entityProduct.getId());
 
@@ -970,7 +1077,7 @@ public class Repository {
             }
             sqlSession.commit();
             sqlSession.close();
-            result = 1;
+            result = insertedEntity.getId();
         } catch (IOException e) {
             e.printStackTrace();
             result = 0;
@@ -980,7 +1087,7 @@ public class Repository {
 
     }
 
-    public int deleteProductById(long id){
+    public int deleteProductById(long id) {
         int result;
         try {
             reader = Resources
@@ -997,12 +1104,12 @@ public class Repository {
             result = 0;
         }
 
-        return  result;
+        return result;
     }
 
     //----------------------------------Cart
 
-    public List<CartItem> getCartItemByUserId(long id){
+    public List<CartItem> getCartItemByUserId(long id) {
         List<CartItem> cartItems = null;
         try {
             reader = Resources
@@ -1020,7 +1127,7 @@ public class Repository {
         return cartItems;
     }
 
-    public List<CartItem> getCartItemByGuestId(long id){
+    public List<CartItem> getCartItemByGuestId(long id) {
         List<CartItem> cartItems = null;
         try {
             reader = Resources
@@ -1038,7 +1145,7 @@ public class Repository {
         return cartItems;
     }
 
-    public void updateCartItem(CartItem cartItem){
+    public void updateCartItem(CartItem cartItem) {
         try {
             reader = Resources
                     .getResourceAsReader("mybatis-config.xml"); //Читаем файл с настройками подключения и настройками MyBatis
@@ -1054,27 +1161,26 @@ public class Repository {
         }
     }
 
-    public int insertCartItem(CartItem cartItem){
+    public int insertCartItem(CartItem cartItem) {
         initConnection();
         int result;
-        if(cartItem.getEn_id()<0){
+        if (cartItem.getEn_id() < 0) {
             result = cartItemMapper.insertGuestCartItem(cartItem);
-        }
-        else {
+        } else {
             result = cartItemMapper.insertUserCartItem(cartItem);
         }
         cummitAndCloseConnection();
         return result;
     }
 
-    public CartItem getCartItemById(long id){
+    public CartItem getCartItemById(long id) {
         initConnection();
         CartItem cartItem = cartItemMapper.getCartItemById(id);
         cummitAndCloseConnection();
         return cartItem;
     }
 
-    public int deleteCartItemById(long id){
+    public int deleteCartItemById(long id) {
         initConnection();
         int result = cartItemMapper.deleteCartItemById(id);
         cummitAndCloseConnection();
@@ -1082,14 +1188,179 @@ public class Repository {
     }
 
 
-
     //-------------------------------------Albums
 
-    public List<Album> getAlbums(){
+    public List<Album> getAlbums() {
         initConnection();
         List<Album> result = albumMapper.getAlbums();
         cummitAndCloseConnection();
         return result;
     }
+    public Album getAlbumById(long id){
+        initConnection();
+        Album album  = albumMapper.getAlbumsById(id);
+        cummitAndCloseConnection();
+        return album;
+    }
 
+
+    //--------------------------------------Orders
+    public boolean createOrder(User user) {
+        boolean result = true;
+        initConnection();
+
+        List<CartItem> userCartItems = cartItemMapper.getUserCartItems(user.getId());
+        if (userCartItems.isEmpty()) {
+            cummitAndCloseConnection();
+            return false;
+        }
+
+        double totalCost = 0;
+        for (CartItem cartItem : userCartItems) {
+            totalCost += productMapper.getProductById(cartItem.getPr_id()).getPrice();
+        }
+
+        EntityList orderEntityID = entityListMapper.getEntityByName("order");
+        Entity orderEntity = new Entity();
+        orderEntity.setType_id(orderEntityID.getId());
+        orderEntity.setId(entityMapper.insertEntity(orderEntity));
+
+        List<Attribute> orderAttributes = attributeMapper.getAllAttributesByType(orderEntity.getType_id());
+        for (Attribute attribute : orderAttributes) {
+            Value attValue = new Value();
+            attValue.setAttId(attribute.getId());
+            attValue.setEntityId(orderEntity.getId());
+            switch (attribute.getAttName()) {
+                case "order_uid": {
+                    attValue.setValue(String.valueOf(user.getId()));
+                    break;
+                }
+                case "order_datetime": {
+                    attValue.setValue(new Timestamp(new Date().getTime()).toString());
+                    break;
+                }
+                case "order_status": {
+                    attValue.setValue("Новый");
+                    break;
+                }
+                case "order_total": {
+                    attValue.setValue(String.valueOf(totalCost));
+                    break;
+                }
+            }
+            valueMapper.insertValue(attValue);
+
+        }
+
+        EntityList orderItemEntityID = entityListMapper.getEntityByName("order_item");
+        List<Attribute> orderItemAtt = attributeMapper.getAllAttributesByType(orderItemEntityID.getId());
+        for (CartItem cartItem : userCartItems) {
+            Entity orderItem = new Entity();
+            orderItem.setType_id(orderItemEntityID.getId());
+            orderItem.setId(entityMapper.insertEntity(orderItem));
+            for (Attribute attribute : orderItemAtt) {
+                Value attValue = new Value();
+                attValue.setAttId(attribute.getId());
+                attValue.setEntityId(orderItem.getId());
+                switch (attribute.getAttName()) {
+                    case "order_item_orderid": {
+                        attValue.setValue(String.valueOf(orderEntity.getId()));
+                        break;
+                    }
+                    case "order_item_pr_id": {
+                        attValue.setValue(String.valueOf(cartItem.getPr_id()));
+                        break;
+                    }
+                    case "order_item_count": {
+                        attValue.setValue(String.valueOf(cartItem.getCounter()));
+                        break;
+                    }
+                }
+                valueMapper.insertValue(attValue);
+            }
+
+        }
+        cartItemMapper.deleteAllUserCartItems(user.getId());
+        cummitAndCloseConnection();
+        return result;
+    }
+
+    public List<Order> getAllOrders() {
+        initConnection();
+        List<Order> result = orderMapper.getAllOrders();
+        cummitAndCloseConnection();
+        return result;
+    }
+
+    public List<Order> getOrdersByUserId(long id) {
+        initConnection();
+        List<Order> result = orderMapper.getOrdersByUserId(id);
+        cummitAndCloseConnection();
+        return result;
+    }
+
+    public List<OrderItem> getAllOrderItemsByOrderID(long id) {
+        initConnection();
+        List<OrderItem> result = orderMapper.getAllOrderItemsByOrderID(id);
+        cummitAndCloseConnection();
+        return result;
+    }
+
+    public Order getAllOrders(long id) {
+        initConnection();
+        Order result = orderMapper.getOrderById(id);
+        cummitAndCloseConnection();
+        return result;
+    }
+
+    public Order getOrderById(long id) {
+        initConnection();
+        Order result = orderMapper.getOrderById(id);
+        cummitAndCloseConnection();
+        return result;
+    }
+
+    public int changeOrderStatus(long id,String status){
+        initConnection();
+        Attribute statusAtt = attributeMapper.getAttributeByName("order_status");
+        Value statusValue = new Value();
+        statusValue.setValue(status);
+        statusValue.setAttId(statusAtt.getId());
+        statusValue.setEntityId(id);
+        int result = valueMapper.updateValue(statusValue);
+        cummitAndCloseConnection();
+        return result;
+    }
+
+    //---------------------------------------Images
+    public int insertImage(Image image) {
+        int result;
+        initConnection();
+        result = imagesMapper.insertImage(image);
+        cummitAndCloseConnection();
+        return result;
+    }
+
+    public List<Image> getImagesByEnId(long id) {
+        initConnection();
+        List<Image> result = imagesMapper.getImagesByEnId(id);
+        cummitAndCloseConnection();
+        return result;
+    }
+
+    public int deleteImageById(long id) {
+        int result;
+        initConnection();
+        result = imagesMapper.deleteImageById(id);
+        cummitAndCloseConnection();
+        return result;
+    }
+
+    public int updateImage(Image image) {
+        int result;
+        initConnection();
+        result = imagesMapper.updateImage(image);
+        cummitAndCloseConnection();
+        return result;
+    }
 }

@@ -26,6 +26,7 @@
         <mapper resource="mapper/ProductMapper.xml"/>
         <mapper resource="mapper/CartItemsMapper.xml"/>
         <mapper resource="mapper/AlbumMapper.xml"/>
-
+        <mapper resource="mapper/OrderMapper.xml"/>
+        <mapper resource="mapper/ImageMapper.xml"/>
     </mappers>
 </configuration>

@@ -1,6 +1,7 @@
 package com.photographer.app.controllers;
 
 import com.photographer.app.model.Album;
+import com.photographer.app.model.Image;
 import com.photographer.app.repo.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,14 +26,12 @@ class GalleryController {
     }
 
     @GetMapping("/albums/{id}")
-    public String album(@PathVariable(value = "id") int id, Model model) {
+    public String album(@PathVariable(value = "id") long id, Model model) {
 
-        List<Album> albums = repository.getAlbums();
-        for(Album album: albums){
-            if(album.getId()==id){
-                model.addAttribute("title", album.getName());
-            }
-        }
+        Album album = repository.getAlbumById(id);
+        model.addAttribute("title", album.getName());
+        List<Image> allAlbumImages = repository.getImagesByEnId(album.getId());
+        model.addAttribute("images",allAlbumImages);
 
         return "album";
     }

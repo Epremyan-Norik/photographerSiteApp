@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //Доступ только для не зарегистрированных пользователей
                 .antMatchers("/registration").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор
-                .antMatchers("/admin/**", "/blog/add", "/blog/edit").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/admin/**", "/blog/*/edit", "/blog/add", "/blog/*/remove").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/news").hasRole("USER")
                 //Доступ разрешен всем пользователей
                 .antMatchers("/", "/resources/**",
@@ -44,7 +44,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/cart", "/check", "/getGuestId",
                         "/getCart",
                         "/addToCart/**",
-                        "/price").permitAll()
+                        "/price",
+                        "/albums",
+                        "/albums/**",
+                        "/blog",
+                        "/blog/*").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .anyRequest().authenticated()

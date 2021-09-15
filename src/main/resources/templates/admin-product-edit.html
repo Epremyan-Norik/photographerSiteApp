@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
+    <link href="../static/css/main.css" th:href="@{/css/no-fixedNav.css}" rel="stylesheet"/>
+</head>
+<body>
+<header th:insert="blocks/header :: header">
+</header>
+
+<div class="container mb-5" style="margin-top: 30px">
+    <form enctype="multipart/form-data" name="edit" th:action="'/admin/products/edit/'+${pr.id}" method="post" >
+        <ul>
+            <li>
+                <label for="name">Название товара</label>
+                <input type="text" name="name" th:value="${pr.name}" required="required" id="name"/>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <label for="description">Описание товара</label>
+                <input type="text" name="description" th:value="${pr.description}" required="required" id="description"/>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <label for="price">Цена</label>
+                <input type="number" name="price" th:value="${pr.price}" required="required" id="price"/>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <p>Активный?</p>
+                <input type="radio" id="Choice1" name="active" value="true" checked>
+                <label for="Choice1">Да</label>
+
+                <input type="radio" id="Choice2" name="active" value="false">
+                <label for="Choice2">Нет</label>
+
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <img th:src="${pr.image}" style="max-width: 200px">
+                <label for="image">Picture</label>
+                <input type="file" name="image" id="image" />
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <input class="btn btn-primary" type="submit" value="Применить"/>
+            </li>
+        </ul>
+    </form>
+
+</div>
+
+
+</body>
+</html>

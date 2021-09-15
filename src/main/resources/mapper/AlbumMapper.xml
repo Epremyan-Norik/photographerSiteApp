@@ -12,5 +12,11 @@
     </select>
 
 
+    <select
+            id="getAlbumsById"
+            resultType="com.photographer.app.model.Album">
+        select * from albums_tree where id = ${id}
+    </select>
+
 
 </mapper>

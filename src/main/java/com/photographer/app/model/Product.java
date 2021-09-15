@@ -7,6 +7,8 @@ public class Product {
     private String description;
     private double price;
     private boolean active;
+    private String image;
+
 
     public Product() {
     }
@@ -21,6 +23,14 @@ public class Product {
                 ", active=" + active +
                 '}';
     }
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 
     public String getDescription() {
         return description;

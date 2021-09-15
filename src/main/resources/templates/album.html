@@ -18,12 +18,11 @@
   <div class="container">
     <p th:text="${title}" style="font-size: 20px"></p>
   <div class="grid">
-    <a data-fancybox="gallery" th:href="@{/img/person.jpg}">
-      <img class="img-fluid" th:src="@{/img/person.jpg}" alt="...">
+    <span th:each="el:${images}">
+    <a data-fancybox="gallery" th:href="${el.imagebyte64}">
+      <img class="img-fluid" th:src="${el.imagebyte64}" alt="...">
     </a>
-    <a data-fancybox="gallery" th:href="@{/img/person.jpg}">
-      <img class="img-fluid" th:src="@{/img/person.jpg}" alt="">
-    </a>
+    </span>
 
   </div>
 </div>

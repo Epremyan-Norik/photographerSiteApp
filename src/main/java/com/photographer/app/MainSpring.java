@@ -13,9 +13,6 @@ public class MainSpring {
 
 
     public static void main(String[] args) {
-        Repository repository = new Repository();
-        List<Album> albums = repository.getAlbums();
-        albums.forEach(System.out::println);
 
         SpringApplication.run(MainSpring.class, args);
     }

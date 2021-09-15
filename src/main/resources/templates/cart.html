@@ -27,7 +27,8 @@
     <hr>
     <div style="width: 100%; text-align: right; margin-left: -10%;">
         <div style="width: 50%; float: right;">
-            <button class="btn btn-primary">Оформить заказ</button>
+            <a sec:authorize="isAuthenticated()" class="btn btn-primary" href="/createOrder">Оформить заказ</a>
+            <a sec:authorize="isAnonymous()" class="btn btn-primary" href="/login">Войдите или Зарегистрируйтесь</a>
         </div>
     </div>
 </div>

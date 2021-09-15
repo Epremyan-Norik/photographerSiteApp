@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.photographer.app.mapper.OrderMapper">
+
+    <!--название метода-->
+    <select
+            id="getAllOrders"
+            resultType="com.photographer.app.model.Order">
+        select * from orders
+    </select>
+
+    <select id="getOrdersByUserId" parameterType="java.lang.Long" resultType="com.photographer.app.model.Order">
+        select *
+        from orders where user_id = ${id}
+    </select>
+
+    <select id="getAllOrderItemsByOrderID" parameterType="java.lang.Long" resultType="com.photographer.app.model.OrderItem">
+        select *
+        from order_items where order_id = ${id}
+    </select>
+
+    <select id="getOrderById" parameterType="java.lang.Long" resultType="com.photographer.app.model.Order">
+        select *
+        from orders where id = ${id}
+    </select>
+
+</mapper>

@@ -1,12 +1,10 @@
 package com.photographer.app.controllers;
 
-import com.photographer.app.model.CartItem;
-import com.photographer.app.model.CartItemForUI;
-import com.photographer.app.model.Product;
-import com.photographer.app.model.User;
+import com.photographer.app.model.*;
 import com.photographer.app.repo.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +26,9 @@ class PriceListController {
     public String getPrice(Model model) {
         model.addAttribute("title", "Услуги");
         List<Product> products = repository.findAllProducts();
+        for(Product product : products){
+            product.setImage(repository.getImagesByEnId(product.getId()).get(0).getImagebyte64());
+        }
         model.addAttribute("products", products);
         return "service-list";
     }
@@ -37,6 +38,54 @@ class PriceListController {
 
         return repository.generateGuestId();
     }
+
+    @GetMapping("/createOrder")
+    public String createOrder(Model model) {
+        model.addAttribute("title", "Заказ");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User user = repository.findUserByUsername(currentPrincipalName);
+        if (repository.createOrder(user)){
+            model.addAttribute("result", "Заказ успешно создан");
+        } else{
+            model.addAttribute("result", "Ошибка создания заказа");
+        }
+        return "createOrder";
+    }
+
+    @GetMapping("/order/{id}")
+    public String getOrder(@AuthenticationPrincipal User user, @PathVariable(value = "id") long id,  Model model) {
+        model.addAttribute("title", "Заказ "+String.valueOf(id));
+
+        Order order  = repository.getOrderById(id);
+        if(order==null){
+            return "order";
+        }
+        if(order.getUser_id()!= user.getId()){
+            return "order";
+        }
+
+        List<OrderItem> orderItems = repository.getAllOrderItemsByOrderID(order.getId());
+        List<CartItemForUI> resultCart = new ArrayList<>();
+        for (OrderItem orderItem : orderItems) {
+            resultCart.add(new CartItemForUI(0,
+                    repository.findProductById(orderItem.getPr_id()).getName(),
+                    repository.findProductById(orderItem.getPr_id()).getPrice(),
+                    orderItem.getCount()));
+        }
+        model.addAttribute("order", order);
+        model.addAttribute("orderItems", resultCart);
+
+        /*if (repository.createOrder(user)){
+            model.addAttribute("result", "Заказ успешно создан");
+        } else{
+            model.addAttribute("result", "Ошибка создания заказа");
+        }*/
+
+
+        return "order";
+    }
+
 
 
     @GetMapping("/cart")
