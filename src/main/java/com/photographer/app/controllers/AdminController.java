@@ -45,7 +45,7 @@ public class AdminController {
 
         Order order = repository.getOrderById(id);
         if (order == null) {
-            return "order";
+            return "redirect:/admin/orders";
         }
 
 
@@ -59,14 +59,6 @@ public class AdminController {
         }
         model.addAttribute("order", order);
         model.addAttribute("orderItems", resultCart);
-
-        /*if (repository.createOrder(user)){
-            model.addAttribute("result", "Заказ успешно создан");
-        } else{
-            model.addAttribute("result", "Ошибка создания заказа");
-        }*/
-
-
         return "admin-order-detail";
     }
 
@@ -174,8 +166,11 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/products/remove/{id}", method = RequestMethod.GET)
     public String removeProduct(@PathVariable(value = "id") long id) {
-        repository.deleteImageById(repository.getImagesByEnId(id).get(0).getId());
-        repository.deleteProductById(id);
+        Product product = repository.findProductById(id);
+        if(product!=null){
+            repository.deleteImageById(repository.getImagesByEnId(id).get(0).getId());
+            repository.deleteProductById(id);
+        }
         return "redirect:/admin/products";
     }
 
