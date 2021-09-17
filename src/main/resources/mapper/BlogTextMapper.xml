@@ -33,7 +33,7 @@
         WHERE id = #{id};
     </update>
 
-    <delete id="deleteBlogPostById" parameterType="java.lang.Long">
+    <delete id="deleteBlogTextById" parameterType="java.lang.Long">
         delete from blogtxt where id = ${id}
     </delete>
 

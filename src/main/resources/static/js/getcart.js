@@ -40,6 +40,7 @@ async function getCart() {
                 let headElement = document.createElement('div');
                 headElement.classList.add('row');
                 headElement.id="row"+json[i].id;
+                headElement.style.marginBottom = "5px";
                // headElement.classList.add('row'+json[i].id);
 
                 let nameElement = document.createElement('div');

@@ -55,7 +55,6 @@ public class BlogController {
         Optional<BlogPost> post = postRepository.findBlogPostById(id);
         ArrayList<BlogPost> res = new ArrayList<>();
         post.ifPresent(BlogPost::incrementView);
-        post.ifPresent(System.out::println);
         post.ifPresent(res::add);
         post.ifPresent(postRepository::saveBlogPost);
         model.addAttribute("post", res);
@@ -92,8 +91,11 @@ public class BlogController {
 
     @PostMapping("/blog/{id}/remove")
     public String removePost(@PathVariable(value = "id") int id, Model model) {
-        BlogPost post = postRepository.findBlogPostById(id).orElseThrow();
-        postRepository.saveBlogPost(post);
+        Optional<BlogPost> post = postRepository.findBlogPostById(id);
+        if(post.isPresent()){
+            postRepository.deleteBlogPostById(post.get().getId());
+        }
+
         return "redirect:/blog";
     }
 }

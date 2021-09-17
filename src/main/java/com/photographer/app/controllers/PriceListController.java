@@ -66,21 +66,15 @@ class PriceListController {
         }
 
         List<OrderItem> orderItems = repository.getAllOrderItemsByOrderID(order.getId());
-        List<CartItemForUI> resultCart = new ArrayList<>();
+       /* List<CartItemForUI> resultCart = new ArrayList<>();
         for (OrderItem orderItem : orderItems) {
             resultCart.add(new CartItemForUI(0,
                     repository.findProductById(orderItem.getPr_id()).getName(),
                     repository.findProductById(orderItem.getPr_id()).getPrice(),
                     orderItem.getCount()));
-        }
-        model.addAttribute("order", order);
-        model.addAttribute("orderItems", resultCart);
-
-        /*if (repository.createOrder(user)){
-            model.addAttribute("result", "Заказ успешно создан");
-        } else{
-            model.addAttribute("result", "Ошибка создания заказа");
         }*/
+        model.addAttribute("order", order);
+        model.addAttribute("orderItems", orderItems);
 
 
         return "order";
@@ -97,7 +91,6 @@ class PriceListController {
 
     @RequestMapping(value="/getCart",method = RequestMethod.POST)
     public @ResponseBody List<CartItemForUI> getCart(@RequestBody String guestId) {
-        System.out.println(guestId);
         List<CartItem> cartItems;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -154,6 +147,7 @@ class PriceListController {
                            @AuthenticationPrincipal User user,
                            @RequestBody String guestId) {
         CartItem cartItem = repository.getCartItemById(cartItemId);
+        if (cartItem == null) return 1;
         if (user == null) {
             guestId = guestId.replaceAll("[^\\d.]", "");
             long guestIdInt = new Long(guestId);
@@ -165,7 +159,7 @@ class PriceListController {
                 repository.deleteCartItemById(cartItemId);
             }
         }
-        return 100;
+        return 1;
     }
 
     @RequestMapping(value="/transferGuest",method = RequestMethod.POST)

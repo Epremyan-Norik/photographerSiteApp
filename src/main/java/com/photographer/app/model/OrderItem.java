@@ -3,8 +3,9 @@ package com.photographer.app.model;
 public class OrderItem {
     private long id;
     private long order_id;
-    private long pr_id;
+    private String name;
     private long count;
+    private double price;
 
     public OrderItem() {
     }
@@ -25,12 +26,12 @@ public class OrderItem {
         this.order_id = order_id;
     }
 
-    public long getPr_id() {
-        return pr_id;
+    public String getName() {
+        return name;
     }
 
-    public void setPr_id(long pr_id) {
-        this.pr_id = pr_id;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getCount() {
@@ -41,14 +42,22 @@ public class OrderItem {
         this.count = count;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     @Override
     public String toString() {
         return "\nOrderItem{" +
                 "id=" + id +
                 ", order_id=" + order_id +
-                ", pr_id=" + pr_id +
+                ", name=" + name +
                 ", count=" + count +
+                ", price=" + price +
                 '}';
     }
 }

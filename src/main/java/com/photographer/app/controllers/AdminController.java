@@ -48,17 +48,10 @@ public class AdminController {
             return "redirect:/admin/orders";
         }
 
-
         List<OrderItem> orderItems = repository.getAllOrderItemsByOrderID(order.getId());
-        List<CartItemForUI> resultCart = new ArrayList<>();
-        for (OrderItem orderItem : orderItems) {
-            resultCart.add(new CartItemForUI(0,
-                    repository.findProductById(orderItem.getPr_id()).getName(),
-                    repository.findProductById(orderItem.getPr_id()).getPrice(),
-                    orderItem.getCount()));
-        }
+
         model.addAttribute("order", order);
-        model.addAttribute("orderItems", resultCart);
+        model.addAttribute("orderItems", orderItems);
         return "admin-order-detail";
     }
 

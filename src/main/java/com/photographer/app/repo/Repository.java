@@ -63,7 +63,7 @@ public class Repository {
         return true;
     }
 
-    private void cummitAndCloseConnection() {
+    private void commitAndCloseConnection() {
         sqlSession.commit();
         sqlSession.close();
     }
@@ -79,11 +79,7 @@ public class Repository {
             result = entityMapper.newGuest();
             sqlSession.commit();
             sqlSession.close();
-            //List<Entity> entities = entityMapper.getAllEntities();
-            //Entity entity = entityMapper.getEntityById(2);
-            //System.out.println(entity);
-            //System.out.println("\nLIST");
-            //entities.forEach(System.out::println);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -293,11 +289,7 @@ public class Repository {
             result = entityMapper.insertEntity(entity);
             sqlSession.commit();
             sqlSession.close();
-            //List<Entity> entities = entityMapper.getAllEntities();
-            //Entity entity = entityMapper.getEntityById(2);
-            //System.out.println(entity);
-            //System.out.println("\nLIST");
-            //entities.forEach(System.out::println);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -316,11 +308,7 @@ public class Repository {
             result = attributeMapper.insertAttribute(attribute);
             sqlSession.commit();
             sqlSession.close();
-            //List<Entity> entities = entityMapper.getAllEntities();
-            //Entity entity = entityMapper.getEntityById(2);
-            //System.out.println(entity);
-            //System.out.println("\nLIST");
-            //entities.forEach(System.out::println);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -339,11 +327,7 @@ public class Repository {
             result = attributeMapper.getAllAttributes();
             sqlSession.commit();
             sqlSession.close();
-            //List<Entity> entities = entityMapper.getAllEntities();
-            //Entity entity = entityMapper.getEntityById(2);
-            //System.out.println(entity);
-            //System.out.println("\nLIST");
-            //entities.forEach(System.out::println);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -362,11 +346,7 @@ public class Repository {
             result = attributeMapper.getAttributeById(id);
             sqlSession.commit();
             sqlSession.close();
-            //List<Entity> entities = entityMapper.getAllEntities();
-            //Entity entity = entityMapper.getEntityById(2);
-            //System.out.println(entity);
-            //System.out.println("\nLIST");
-            //entities.forEach(System.out::println);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -385,11 +365,7 @@ public class Repository {
             result = attributeMapper.getAttributeByName(name);
             sqlSession.commit();
             sqlSession.close();
-            //List<Entity> entities = entityMapper.getAllEntities();
-            //Entity entity = entityMapper.getEntityById(2);
-            //System.out.println(entity);
-            //System.out.println("\nLIST");
-            //entities.forEach(System.out::println);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -408,11 +384,7 @@ public class Repository {
             result = valueMapper.insertValue(value);
             sqlSession.commit();
             sqlSession.close();
-            //List<Entity> entities = entityMapper.getAllEntities();
-            //Entity entity = entityMapper.getEntityById(2);
-            //System.out.println(entity);
-            //System.out.println("\nLIST");
-            //entities.forEach(System.out::println);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -433,11 +405,7 @@ public class Repository {
             result = valueMapper.updateValue(value);
             sqlSession.commit();
             sqlSession.close();
-            //List<Entity> entities = entityMapper.getAllEntities();
-            //Entity entity = entityMapper.getEntityById(2);
-            //System.out.println(entity);
-            //System.out.println("\nLIST");
-            //entities.forEach(System.out::println);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -460,11 +428,7 @@ public class Repository {
             result = valueMapper.getValueByIds(map);
             sqlSession.commit();
             sqlSession.close();
-            //List<Entity> entities = entityMapper.getAllEntities();
-            //Entity entity = entityMapper.getEntityById(2);
-            //System.out.println(entity);
-            //System.out.println("\nLIST");
-            //entities.forEach(System.out::println);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -485,11 +449,7 @@ public class Repository {
             result = valueMapper.getValues();
             sqlSession.commit();
             sqlSession.close();
-            //List<Entity> entities = entityMapper.getAllEntities();
-            //Entity entity = entityMapper.getEntityById(2);
-            //System.out.println(entity);
-            //System.out.println("\nLIST");
-            //entities.forEach(System.out::println);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -511,11 +471,7 @@ public class Repository {
             result = entityListMapper.getEntityById(id);
             sqlSession.commit();
             sqlSession.close();
-            //List<Entity> entities = entityMapper.getAllEntities();
-            //Entity entity = entityMapper.getEntityById(2);
-            //System.out.println(entity);
-            //System.out.println("\nLIST");
-            //entities.forEach(System.out::println);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -537,11 +493,7 @@ public class Repository {
             result = entityListMapper.getAllAvailableEntities();
             sqlSession.commit();
             sqlSession.close();
-            //List<Entity> entities = entityMapper.getAllEntities();
-            //Entity entity = entityMapper.getEntityById(2);
-            //System.out.println(entity);
-            //System.out.println("\nLIST");
-            //entities.forEach(System.out::println);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -619,7 +571,7 @@ public class Repository {
         } else {
             valueMapper.updateValue(confirmCode);
         }
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return true;
     }
 
@@ -630,7 +582,7 @@ public class Repository {
         map.put("en_id", user.getId());
         map.put("att_id", confirmAtt.getId());
         Value confirmVal = valueMapper.getValueByIds(map);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return confirmVal.getValue();
     }
 
@@ -654,7 +606,7 @@ public class Repository {
             valueMapper.insertValue(email);
         }
 
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
     }
 
     public boolean emailIsConfirmed(User user){
@@ -678,7 +630,7 @@ public class Repository {
             }
         }
 
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return  result;
     }
     public String getUserEmail(User user){
@@ -692,7 +644,7 @@ public class Repository {
         if(emailVal!=null){
             email = emailVal.getValue();
         }
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return email;
     }
 
@@ -948,6 +900,14 @@ public class Repository {
         return Optional.ofNullable(blogPost);
     }
 
+    public int deleteBlogPostById(long id) {
+        initConnection();
+        entityMapper.deleteEntityById(id);
+        int result = blogTextMapper.deleteBlogTextById(id);
+        commitAndCloseConnection();
+        return  result;
+    }
+
 
     //----------------------------------Object Product
 
@@ -1169,21 +1129,21 @@ public class Repository {
         } else {
             result = cartItemMapper.insertUserCartItem(cartItem);
         }
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 
     public CartItem getCartItemById(long id) {
         initConnection();
         CartItem cartItem = cartItemMapper.getCartItemById(id);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return cartItem;
     }
 
     public int deleteCartItemById(long id) {
         initConnection();
         int result = cartItemMapper.deleteCartItemById(id);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 
@@ -1193,13 +1153,13 @@ public class Repository {
     public List<Album> getAlbums() {
         initConnection();
         List<Album> result = albumMapper.getAlbums();
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
     public Album getAlbumById(long id){
         initConnection();
         Album album  = albumMapper.getAlbumsById(id);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return album;
     }
     public void deleteAlbumById(long id){
@@ -1218,7 +1178,7 @@ public class Repository {
         }
 
 
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
     }
     public void addAlbum(Album album){
         initConnection();
@@ -1243,7 +1203,7 @@ public class Repository {
             valueMapper.insertValue(insertedAtt);
         }
 
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
     }
     public void editAlbum(Album album){
         initConnection();
@@ -1265,7 +1225,7 @@ public class Repository {
             valueMapper.updateValue(insertedAtt);
         }
 
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
     }
 
 
@@ -1276,7 +1236,7 @@ public class Repository {
 
         List<CartItem> userCartItems = cartItemMapper.getUserCartItems(user.getId());
         if (userCartItems.isEmpty()) {
-            cummitAndCloseConnection();
+            commitAndCloseConnection();
             return false;
         }
 
@@ -1323,6 +1283,7 @@ public class Repository {
             Entity orderItem = new Entity();
             orderItem.setType_id(orderItemEntityID.getId());
             orderItem.setId(entityMapper.insertEntity(orderItem));
+            Product currProduct  = productMapper.getProductById(cartItem.getPr_id());
             for (Attribute attribute : orderItemAtt) {
                 Value attValue = new Value();
                 attValue.setAttId(attribute.getId());
@@ -1332,8 +1293,12 @@ public class Repository {
                         attValue.setValue(String.valueOf(orderEntity.getId()));
                         break;
                     }
-                    case "order_item_pr_id": {
-                        attValue.setValue(String.valueOf(cartItem.getPr_id()));
+                    case "order_item_name": {
+                        attValue.setValue(String.valueOf(currProduct.getName()));
+                        break;
+                    }
+                    case "order_item_price": {
+                        attValue.setValue(String.valueOf(currProduct.getPrice()));
                         break;
                     }
                     case "order_item_count": {
@@ -1346,42 +1311,42 @@ public class Repository {
 
         }
         cartItemMapper.deleteAllUserCartItems(user.getId());
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 
     public List<Order> getAllOrders() {
         initConnection();
         List<Order> result = orderMapper.getAllOrders();
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 
     public List<Order> getOrdersByUserId(long id) {
         initConnection();
         List<Order> result = orderMapper.getOrdersByUserId(id);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 
     public List<OrderItem> getAllOrderItemsByOrderID(long id) {
         initConnection();
         List<OrderItem> result = orderMapper.getAllOrderItemsByOrderID(id);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 
     public Order getAllOrders(long id) {
         initConnection();
         Order result = orderMapper.getOrderById(id);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 
     public Order getOrderById(long id) {
         initConnection();
         Order result = orderMapper.getOrderById(id);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 
@@ -1393,7 +1358,7 @@ public class Repository {
         statusValue.setAttId(statusAtt.getId());
         statusValue.setEntityId(id);
         int result = valueMapper.updateValue(statusValue);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 
@@ -1402,14 +1367,14 @@ public class Repository {
         int result;
         initConnection();
         result = imagesMapper.insertImage(image);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 
     public List<Image> getImagesByEnId(long id) {
         initConnection();
         List<Image> result = imagesMapper.getImagesByEnId(id);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 
@@ -1417,7 +1382,7 @@ public class Repository {
         int result;
         initConnection();
         result = imagesMapper.deleteImageById(id);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 
@@ -1425,7 +1390,7 @@ public class Repository {
         int result;
         initConnection();
         result = imagesMapper.updateImage(image);
-        cummitAndCloseConnection();
+        commitAndCloseConnection();
         return result;
     }
 }
